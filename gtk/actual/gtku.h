@@ -8,11 +8,12 @@
 
 
 
-typedef struct 
-{
+typedef struct {
 	gpointer user_data;
 	GtkBuilder* builder;
 }Data;
+
+
 
 
 //void create_window(int argc, char* argv[]);

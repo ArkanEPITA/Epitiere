@@ -29,8 +29,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkButton" id="button1">
-            <property name="label" translatable="yes">button</property>
+          <object class="GtkButton" id="validation1">
+            <property name="label" translatable="yes">Validate</property>
             <property name="name">button1</property>
             <property name="width_request">440</property>
             <property name="height_request">20</property>
@@ -38,27 +38,10 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="border_width">10</property>
-            <signal name="clicked" handler="print_coucou" swapped="no"/>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="spinbutton1">
-            <property name="name">spinbutton1</property>
-            <property name="width_request">100</property>
-            <property name="height_request">80</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="margin_bottom">10</property>
-            <property name="caps_lock_warning">False</property>
-            <property name="input_purpose">digits</property>
-            <property name="orientation">vertical</property>
-            <property name="adjustment">adjustment1</property>
-            <property name="climb_rate">2.2351741811588166e-10</property>
-            <signal name="output" handler="spinbutton1_output_cb" swapped="no"/>
+            <signal name="clicked" handler="on_validation_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="x">100</property>
-            <property name="y">100</property>
+            <property name="y">157</property>
           </packing>
         </child>
         <child>
@@ -73,12 +56,54 @@
             <property name="input_purpose">digits</property>
             <property name="orientation">vertical</property>
             <property name="adjustment">adjustment2</property>
-            <signal name="input" handler="spinbutton2_input_cb" swapped="no"/>
-            <signal name="output" handler="spinbutton2_output_cb" swapped="no"/>
           </object>
           <packing>
-            <property name="x">250</property>
-            <property name="y">100</property>
+            <property name="x">310</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="spinbutton1">
+            <property name="name">spinbutton1</property>
+            <property name="width_request">100</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="margin_bottom">10</property>
+            <property name="caps_lock_warning">False</property>
+            <property name="input_purpose">digits</property>
+            <property name="orientation">vertical</property>
+            <property name="adjustment">adjustment1</property>
+            <property name="climb_rate">2.2351741811588166e-10</property>
+          </object>
+          <packing>
+            <property name="x">82</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="name">label1</property>
+            <property name="width_request">100</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Hours:</property>
+          </object>
+          <packing>
+            <property name="y">20</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="name">label2</property>
+            <property name="width_request">100</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Minutes:</property>
+          </object>
+          <packing>
+            <property name="x">224</property>
+            <property name="y">20</property>
           </packing>
         </child>
       </object>
