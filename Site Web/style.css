@@ -1,0 +1,144 @@
+h1{
+  font-family: "Old Standard TT", serif;
+  text-align: center;
+  position: absolute;
+  top: 200px;
+  left:220px;
+  color : white;
+  text-shadow: 
+	black 1px 1px 1px, 
+	black -1px 1px 1px, 
+	black -1px -1px 1px, 
+	black 1px -1px 1px; 
+}
+
+div.image_fond_1{
+ position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+div.image_fond_2{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+div.logo{
+  position: absolute;
+  top: 180px;
+  right: 250px;
+}
+
+h3
+{
+  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-left:10px;
+  font-style: italic;
+  color: #2954FF;
+  font-size:150%;
+}
+
+
+body{
+	    background-color: #dfdfdf;
+}
+div.texte
+{
+	text-align: justify;
+	font-size:130%;
+  margin-left:10px;
+  margin-right:10px;
+	
+	
+}
+div.mainTitle{
+  padding: 3px;
+  text-align: center;
+  color: black;
+  padding-top:580px;
+  font-size:200%;
+}
+
+
+nav {
+    font-family: monospace;
+    text-align: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+/*barre*/
+.main-ul {
+  background: #291000;
+  position : absolute;
+  list-style: none;
+  top:500px;
+  left:0px;
+  width: 100%;
+
+}
+
+/*boutons principaux*/
+.main-btn {
+  
+  background: #291000;
+  display: block;
+  float: left;
+  padding: 20px; /*dimension du bouton*/
+  position : relative;
+  text-decoration: none;
+  transition-duration: 0.5s;
+  width: 250px;
+  height: 40px;
+
+}
+  
+  /*boutons principaux ecriture*/
+.main-ul li a {
+  color: #fff;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  font-size:180%;
+}
+
+/*boutons principaux*/
+.main-btn li:hover > ul,
+.main-btn li:focus > ul,
+.main-btn:hover,
+.main-btn:focus {
+    background: #BE4A21;
+    cursor: pointer;
+}
+
+div.titre{
+  text-decoration: underline;
+}
+
+footer {
+  width: 1000px;
+  height: 6em;
+  font-size: 20px;
+  margin-left:-20px;
+}
+
+footer p{
+  top: -15px;
+  width: 100%;
+  margin: 20px;
+}
+

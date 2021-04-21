@@ -1,0 +1,14 @@
+
+
+
+#main_window{
+    background-color: aqua;
+}
+
+
+#button1{
+    color: red;
+    background-color: cornflowerblue;
+    margin-left: 10px;
+    margin-right: 100px;
+}
