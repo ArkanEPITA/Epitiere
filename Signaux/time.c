@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-int coffe(int Hours, int Mins)
+int coffee(int Hours, int Mins)
 {
 	// lire l'heure courante
    	time_t now = time (NULL);
@@ -20,15 +20,15 @@ int coffe(int Hours, int Mins)
 
 	int timenow = atoi(s_now);
 
-	int timecoffe = Hours*100 + Mins;
+	int timecoffee = Hours*100 + Mins;
 
-	if(timecoffe > 2359)
+	if(timecoffee > 2359)
 			errx(EXIT_FAILURE,"please enter a correct time \"hours:mins\"");
 
 	for (int i = 0; i < 2; ++i)
 	{
-			int j = timecoffe % 100;
-			timecoffe /= 100;
+			int j = timecoffee % 100;
+			timecoffee /= 100;
 			if(i == 0 && j > 59)
 				errx(EXIT_FAILURE,"please enter a correct time");
 			if(i == 1 && j > 23)
@@ -56,8 +56,8 @@ int coffe(int Hours, int Mins)
 	printf("%d\n", secondes);
 	sleep(secondes);
 
-	//insert starting coffe function
+	//insert starting coffee function
 	
-	printf("your coffe start now\n");
+	printf("your coffee start now\n");
 	return 0;
 }

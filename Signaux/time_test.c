@@ -9,26 +9,26 @@
 int main()
 {
 
-	char timecoffestr[sizeof "HH:MM"];
-	scanf("%s",timecoffestr);
+	char timecoffeestr[sizeof "HH:MM"];
+	scanf("%s",timecoffeestr);
 	
-	int timecoffe = 0;
-	for (int i = 0; i < (int)strlen(timecoffestr); ++i)
+	int e = 0;
+	for (int i = 0; i < (int)strlen(timecoffeestr); ++i)
 	{	
-		if(timecoffestr[i] >= '0' && timecoffestr[i] <= '9')
+		if(timecoffeestr[i] >= '0' && timecoffeestr[i] <= '9')
 		{
-			timecoffe += (int)(timecoffestr[i]-'0');
-			timecoffe *= 10;
+			timecoffee += (int)(timecoffeestr[i]-'0');
+			timecoffee *= 10;
 		}
-		else if (timecoffestr[i] != ':' && timecoffestr[i] != '\n')
+		else if (timecoffestr[i] != ':' && timecoffeestr[i] != '\n')
 			errx(EXIT_FAILURE,"please enter a correct time in number \"hour:mins\"");
 	}
-	timecoffe/=10;
+	timecoffee/=10;
 
-	if(timecoffe > 2359)
+	if(timecoffee > 2359)
 			errx(EXIT_FAILURE,"please enter a correct time \"hour:mins\"");
 
-	int temptime = timecoffe;
+	int temptime = timecoffee;
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -56,9 +56,9 @@ int main()
 	// afficher le resultat :
 	printf ("'%d'\n", timenow);
 
-	printf("'%d'\n", timecoffe);
-	int hours = timecoffe/100;
-	int mins = hours *60 + timecoffe%100;
+	printf("'%d'\n", timecoffee);
+	int hours = timecoffee/100;
+	int mins = hours *60 + timecoffee%100;
 
 	int nowh = timenow/100;
 	int nowm = nowh*60 + timenow%100;
@@ -78,6 +78,6 @@ int main()
 	int secondes = m*60;
 	printf("%d\n", secondes);
 	sleep(secondes);
-	printf("your coffe start now\n");
+	printf("your coffee start now\n");
 	return 0;
 }
