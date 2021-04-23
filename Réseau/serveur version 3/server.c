@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 
 #define MAX 80
 #define PORT 8080
@@ -59,7 +60,7 @@ int main()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+  servaddr.sin_addr.s_addr = inet_addr("192.168.0.38");
   servaddr.sin_port = htons(PORT);
 
   // Binding newly created socket to given IP and verification

@@ -1,11 +1,12 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <err.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <netdb.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define MAX 80
 #define PORT 8080
@@ -49,7 +50,7 @@ int main()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("10.0.2.15");
+  servaddr.sin_addr.s_addr = inet_addr("192.168.0.38");
   servaddr.sin_port = htons(PORT);
 
   // connect the client socket to server socket
