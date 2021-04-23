@@ -12,7 +12,7 @@ int main()
 	char timecoffeestr[sizeof "HH:MM"];
 	scanf("%s",timecoffeestr);
 	
-	int e = 0;
+	int timecoffee = 0;
 	for (int i = 0; i < (int)strlen(timecoffeestr); ++i)
 	{	
 		if(timecoffeestr[i] >= '0' && timecoffeestr[i] <= '9')
@@ -20,7 +20,7 @@ int main()
 			timecoffee += (int)(timecoffeestr[i]-'0');
 			timecoffee *= 10;
 		}
-		else if (timecoffestr[i] != ':' && timecoffeestr[i] != '\n')
+		else if (timecoffeestr[i] != ':' && timecoffeestr[i] != '\n')
 			errx(EXIT_FAILURE,"please enter a correct time in number \"hour:mins\"");
 	}
 	timecoffee/=10;
