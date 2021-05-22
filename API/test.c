@@ -2,92 +2,103 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <err.h>
+#include <string.h>
 
+struct get_json{
+    char* type;
+    int heure;
+    int activate;
+};
 
-json_t *get_json_file()
+struct get_json get[10];
+
+void get_json_file()
 {
-    json_error_t err;
+    json_t *json = json_load_file("./test.json", 0, NULL);
 
-                    //Load the file JSON
-    json_t *root = json_load_file("./test.json", 0, &err);
-
-    //Test: is content okay ?
-    if(!root)
+    for (size_t pos = 0; pos < 10; pos++)
     {
-        json_decref(root);
-        errx(EXIT_FAILURE, "Error while loading json file");
+        json_t *coffee = json_array_get(json, pos);
+
+        json_t *type = json_object_get(coffee, "type");
+        json_t *heure = json_object_get(coffee, "heure");
+        json_t *activate = json_object_get(coffee, "activate");
+
+        get[pos].type = (char *)json_string_value(type);
+        get[pos].heure = (int)json_integer_value(heure);
+        get[pos].activate = (int)json_integer_value(activate);
     }
-
-    return root;
-
-
-    //ALL OF THE BELOW IS FOR TESTS ONLY
-
-    //Test: What type is "root" ?
-    if(json_is_object(root))
-    {
-        printf("root is an object\n");
-    }
-
-    //If not what's below, print type of root.
-    
-    else
-    {
-        printf("root type : %d\n", json_typeof(root));
-    }
-
-                    //Get the data inside the "json_object"
-    json_t *data = json_object_get(root, "id");
-
-    //Test: Is data an integer ?
-    if(json_is_integer(data))
-    {
-                    //Transform json_int which is not understandable
-                    //In C byget_json_data a real int
-        int value = json_integer_value(data);
-        printf("Coffee id is : %d\n", value);
-    }
-    //If not of the above, print type of data
-    else
-    {
-        printf("data type is : %d\n", json_typeof(data));
-    }
-
 }
 
 
-int main()
+
+void put_json_file(char *index, char* value, char* key)
 {
-    json_t *file = get_json_file();
+    json_t *json = json_load_file("./test.json", 0, NULL);
+/*
+    size_t max = json_array_size(json); //BE CAREFUL TO BE SURE THAT "json" IS AN ARRAY
+    size_t pos = 0;
 
-    json_t *test = json_string("court");
-
-    if(!file)
+    while(pos < max)
     {
-        printf("File is not okay >:((\n");
+        json_object_set(json_array_get(json, pos), "type", json_string("long"));
+        pos += 1;
+    }
+*/
+    int pos = atoi(index);
+
+    if(strcmp(value, "type") == 0)
+    {
+        json_object_set(json_array_get(json, pos), value, json_string(key));
     }
 
-    json_t *data = json_object_get(file, "cafe");
-
-
-
-    if(json_object_set(data, "cafe", test))
-    {
-        printf("cafe modified\n");
-    }
     else
     {
-        printf("cafe not modified\n");
+        json_object_set(json_array_get(json, pos), value, json_integer(atoi(key)));
     }
 
-    if(json_dump_file(file, "./test.json", JSON_INDENT(4)))
+    
+
+    json_dump_file(json, "./test.json", JSON_INDENT(4));
+}
+
+
+int main(int argc, char* argv[])
+{
+    if(argc < 2)
     {
-        printf("JSON file modified\n");
+        errx(EXIT_FAILURE, "Need at least 1 argument");
     }
-    else
+
+    printf("%s\n", argv[1]);
+
+    if(strcmp(argv[1], "get") == 0)
     {
-        printf("JSON file not modified\n");
+        get_json_file();
+
+        printf("[\n");
+        for (size_t pos = 0; pos < 10; pos++)
+        {
+            char* type = get[pos].type;
+            int heure = get[pos].heure;
+            int activate = get[pos].activate;
+
+            printf("{\n\ttype: %s\n\theure: %d\n\tactivate: %d\n}\n", type, heure, activate);
+        }
+        printf("]\n");
     }
+    else if(strcmp(argv[1], "put") == 0)
+    {
+        if(argc != 5)
+        {
+            errx(EXIT_FAILURE, "Need 3 other argument with \"put\" : index, value, key");
+        }
+        else
+        {
+            put_json_file(argv[2], argv[3], argv[4]);
+        }
+    }
+
 
     return EXIT_SUCCESS;
 }
