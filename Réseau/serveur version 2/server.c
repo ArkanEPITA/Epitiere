@@ -8,11 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*typedef struct User
-{
-	char nom[30];
-	int age;
-}User;*/
 char buffer[32] = "Bonjour !";
 
 int main(void)
@@ -37,11 +32,6 @@ printf("accept\n");
 
 printf("client : %d\n",socketClient);
 
-/*User user = {
-	.nom = "Clara",
-	.age = 20
-	
-};*/
 
 send(socketClient,buffer,32,0);
 
