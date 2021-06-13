@@ -2,8 +2,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra
 LDLIBS = -ljansson
 
-EXE = test
-OBJ = test.o
+EXE = json
+OBJ = json.o
 
 all: $(EXE)
 
@@ -11,5 +11,5 @@ api: $(OBJ)
 
 
 clean: 
-	${RM} test
+	${RM} json
 	${RM} $(OBJ)
