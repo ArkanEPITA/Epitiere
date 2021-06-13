@@ -9,6 +9,7 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <signal.h>
+#include "../../API/json.h"
 
 #define MAX_CLIENTS 100
 #define BUFFER_SZ 2048
@@ -23,6 +24,15 @@ typedef struct {
     int id;                  /* Client unique identifier */
     char name[32];           /* Client name */
 } client_t;
+
+
+typedef struct{
+	int hour;
+	int index;
+	char* type;
+}next;
+
+next next_coffee;
 
 client_t *clients[MAX_CLIENTS];
 
@@ -60,7 +70,44 @@ void queue_delete(int id){
 /* Do the GET to the API */
 void Get_Api()
 {
+	struct get_json get[10];
 
+	int min_i = -1;
+	int min = 0;
+
+	get_json_file(get);
+
+    for(size_t i = 0; i < 10; i++)
+    {
+        if(get[i].activate == 1)
+        {
+        	int hour = get[i].heure;
+        	int  to_wait = coffee(hour / 100, hour % 100);
+
+        	if(min_i == -1)
+        	{
+        		min_i = i;
+        		min = to_wait;
+
+        		next_coffee.index = i;
+        		next_coffee.hour = min;
+        		next_coffee.type = get[i].type;
+        	}
+        	else
+        	{
+        		if(to_wait < min)
+        		{
+        			min = to_wait;
+        			min_i = i;
+
+        			next_coffee.index = i;
+	        		next_coffee.hour = min;
+	        		next_coffee.type = get[i].type;
+        		}
+        	}
+            
+        }
+    }
 }
 
 /* Print ip address */
