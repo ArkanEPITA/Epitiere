@@ -20,7 +20,7 @@ static int id = 10;
 typedef struct {
     struct sockaddr_in addr; /* Client remote address */
     int connfd;              /* Connection file descriptor */
-    int id;                 /* Client unique identifier */
+    int id;                  /* Client unique identifier */
     char name[32];           /* Client name */
 } client_t;
 
@@ -57,6 +57,7 @@ void queue_delete(int id){
     pthread_mutex_unlock(&clients_mutex);
 }
 
+/* Do the GET to the API */
 void Get_Api()
 {
 
@@ -77,18 +78,21 @@ void *handle_client(void *arg)
     cli_count++;
     client_t *cli = (client_t *)arg;
 
+    /* displays that the connection with the client is successful */
     printf("<< receved ");
     print_client_addr(cli->addr);
     printf(" referenced by %d\n", cli->id);
     
-    char buff[80];
+
+    char buff[2];
 	bzero(buff, sizeof(buff));
-	ssize_t r = 1;
+	ssize_t r = 0;
 
+	/* checks if the connection with the client has not been interrupted */
 	r = read(cli->connfd, buff, sizeof(buff));
-
 	if(r != 0)
 	{
+		/* call the Get_Api() function */
 		pthread_mutex_lock(&api_mutex);
 		write(STDOUT_FILENO, "get_api\n", 9);
 		Get_Api();
