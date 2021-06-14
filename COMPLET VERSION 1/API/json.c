@@ -17,7 +17,7 @@
 void get_json_file(struct get_json get[10])
 {
 
-    json_t *json = json_load_file("./test.json", 0, NULL);
+    json_t *json = json_load_file("../API/test.json", 0, NULL);
 
     for (size_t pos = 0; pos < 10; pos++)
     {
@@ -37,7 +37,7 @@ void get_json_file(struct get_json get[10])
 
 void put_json_file(char *index, char* value, char* key)
 {
-    json_t *json = json_load_file("./test.json", 0, NULL);
+    json_t *json = json_load_file("../API/test.json", 0, NULL);
 /*
     size_t max = json_array_size(json); //BE CAREFUL TO BE SURE THAT "json" IS AN ARRAY
     size_t pos = 0;
@@ -61,7 +61,7 @@ void put_json_file(char *index, char* value, char* key)
 
     
 
-    json_dump_file(json, "./test.json", JSON_INDENT(4));
+    json_dump_file(json, "../API/test.json", JSON_INDENT(4));
 }
 
 char next_index()
@@ -94,7 +94,7 @@ char next_index()
 
     return res;
 }
-
+/*
 int main(int argc, char* argv[])
 {
     struct get_json get[10];
@@ -136,4 +136,4 @@ int main(int argc, char* argv[])
 
 
     return EXIT_SUCCESS;
-}
+}*/

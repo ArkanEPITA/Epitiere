@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -pthread
 LDLIBS = -ljansson -pthread
 
 
-SRC = time.c json.c server.c
+SRC = time.c ../API/json.c server.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 

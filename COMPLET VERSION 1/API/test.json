@@ -15,7 +15,7 @@
         "heure": 1200
     },
     {
-        "activate": "1",
+        "activate": 0,
         "type": "long",
         "heure": 1300
     },
