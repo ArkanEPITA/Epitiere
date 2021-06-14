@@ -8,16 +8,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX 80
+#define MAX 200
 #define PORT 8080
 #define SA struct sockaddr
 
 void func(int sockfd)
 {
+  write(sockfd, "1", 1);
   char buff[MAX];
+  ssize_t r = 0;
+  while(r == 0)
+  {
+      memset(buff,0,MAX);
+      ssize_t r = 0;
+      r = read(sockfd, buff, sizeof(buff));
+      if(r != 0)
+      {   
+          write(STDOUT_FILENO, buff, r);
+          printf("\n");
+      }
+      sleep(1);
+  }
+
   int n = 0;
   
-  bzero(buff, sizeof(buff));
+  memset(buff,0,MAX);
   printf("Enter the string : ");
   while ((buff[n++] = getchar()) != '\n');
   write(sockfd, buff, sizeof(buff));
@@ -43,7 +58,7 @@ int main()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("192.168.0.33");
+  servaddr.sin_addr.s_addr = inet_addr("192.168.1.29");
   servaddr.sin_port = htons(PORT);
 
   // connect the client socket to server socket

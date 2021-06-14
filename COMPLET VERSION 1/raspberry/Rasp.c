@@ -18,7 +18,7 @@ void func(int sockfd)
 
     while(1)
     {
-        bzero(buff, 80);
+        memset(buff,0,80);
         ssize_t r = 0;
         r = read(sockfd, buff, sizeof(buff));
         if(r != 0)
@@ -46,7 +46,7 @@ int main()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("192.168.0.33");
+  servaddr.sin_addr.s_addr = inet_addr("192.168.1.29");
   servaddr.sin_port = htons(PORT);
 
   // connect the client socket to server socket

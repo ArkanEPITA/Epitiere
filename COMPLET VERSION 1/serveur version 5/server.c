@@ -9,7 +9,7 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <signal.h>
-#include "json.h"
+#include "../API/json.h"
 #include "time.h"
 #include <jansson.h>
 
@@ -108,8 +108,9 @@ void SendRasp()
 }
 
 /* Do the GET to the API */
-void Get_Api()
+void Get_Api(void *arg)
 {
+	client_t *cli = (client_t *)arg;
 	struct get_json get[10];
 
 	int min_i = -1;
@@ -117,38 +118,32 @@ void Get_Api()
 
 	get_json_file(get);
     
+    
+
     for(size_t i = 0; i < 10; i++)
     {
         
         if(get[i].activate == 1)
         {
+        	write(cli->connfd,get,sizeof(get));
         	int hour = get[i].heure;
         	int  to_wait = coffee(hour / 100, hour % 100);
 
-        	if(min_i == -1)
+        	if(to_wait < current_time)
         	{
-        		min_i = i;
+        		current_time = to_wait;
         		min = to_wait;
+        		min_i = i;
 
         		next_coffee.index = i;
-        		next_coffee.hour = min;
-        		next_coffee.type = get[i].type;
+		        next_coffee.hour = min;
+		        next_coffee.type = get[i].type;
         	}
-        	else
-        	{
-        		if(to_wait < min)
-        		{
-        			min = to_wait;
-        			min_i = i;
-
-        			next_coffee.index = i;
-	        		next_coffee.hour = min;
-	        		next_coffee.type = get[i].type;
-        		}
-        	}
+        	
             
         }
     }
+    printf("get_api : %d\n", min_i);
     SendRasp();
     
 }
@@ -184,8 +179,8 @@ void *handle_client(void *arg)
 	{
 		/* call the Get_Api() function */
 		pthread_mutex_lock(&api_mutex);
-		write(STDOUT_FILENO, "get_api\n", 9);
-		Get_Api();
+		
+		Get_Api(cli);
 		pthread_mutex_unlock(&api_mutex);
 	}
     
@@ -219,7 +214,7 @@ int main(){
     /* Socket settings */
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.0.33");
+    serv_addr.sin_addr.s_addr = inet_addr("192.168.1.29");
     serv_addr.sin_port = htons(8080);
 
     if(setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&value,sizeof(int)) < 0)
@@ -269,6 +264,7 @@ int main(){
         }
         else
         {
+        	
             /* Add client to the queue and fork thread */
             queue_add(cli);
             pthread_create(&tid, NULL, &handle_client, (void*)cli);

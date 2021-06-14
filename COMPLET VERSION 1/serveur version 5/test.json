@@ -1,6 +1,6 @@
 [
     {
-        "activate": 0,
+        "activate": 1,
         "type": "long",
         "heure": 1000
     },
@@ -15,7 +15,7 @@
         "heure": 1200
     },
     {
-        "activate": "1",
+        "activate": 1,
         "type": "long",
         "heure": 1300
     },
@@ -30,8 +30,8 @@
         "heure": 1500
     },
     {
-        "activate": 0,
-        "type": "long",
+        "activate": 1,
+        "type": "longo",
         "heure": 1600
     },
     {
@@ -47,6 +47,6 @@
     {
         "activate": 1,
         "type": "court",
-        "heure": 1900
+        "heure": 1700
     }
 ]
