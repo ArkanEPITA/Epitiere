@@ -1,0 +1,52 @@
+[
+    {
+        "activate": 0,
+        "type": "long",
+        "heure": 1000
+    },
+    {
+        "activate": 0,
+        "type": "long",
+        "heure": 1100
+    },
+    {
+        "activate": 0,
+        "type": "long",
+        "heure": 1200
+    },
+    {
+        "activate": 1,
+        "type": "long",
+        "heure": 1300
+    },
+    {
+        "activate": 0,
+        "type": "long",
+        "heure": 1400
+    },
+    {
+        "activate": 0,
+        "type": "long",
+        "heure": 1500
+    },
+    {
+        "activate": 0,
+        "type": "long",
+        "heure": 1600
+    },
+    {
+        "activate": 0,
+        "type": "long",
+        "heure": 1700
+    },
+    {
+        "activate": 0,
+        "type": "long",
+        "heure": 1834
+    },
+    {
+        "activate": 1,
+        "type": "court",
+        "heure": 1456
+    }
+]
