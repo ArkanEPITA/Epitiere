@@ -5,7 +5,7 @@
         "heure": 1000
     },
     {
-        "activate": 0,
+        "activate": 1,
         "type": "long",
         "heure": 1100
     },
