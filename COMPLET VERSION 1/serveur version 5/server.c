@@ -11,15 +11,28 @@
 #include <signal.h>
 #include "json.h"
 #include "time.h"
+#include <jansson.h>
 
 #define MAX_CLIENTS 100
 #define BUFFER_SZ 2048
 
 static _Atomic unsigned int cli_count = 0;
 static int id = 10;
+/*
+pthread_t pwaiting;
+void my_handler(int signum)
+{
+    if (signum == SIGUSR1)
+    {
+        printf("Received SIGUSR1!\n");
+    }
+}
 
+signal(SIGUSR1, my_handler);
+*/
 /* Raspberry fd */
 int raspfd;
+int current_time = 9999999;
 
 /* Client structure */
 typedef struct {
@@ -70,13 +83,27 @@ void queue_delete(int id){
     }
     pthread_mutex_unlock(&clients_mutex);
 }
+/*
+void *waiting(void* i)
+{
+	pthread_detach(pthread_self());
+	printf("coffee is waiting\n");
+    sleep(i);
+    printf("%d\n",i);
+    printf("coffee is starting\n");
+    write(raspfd,next_coffee.type,sizeof(next_coffee));
 
+}
+*/
 void SendRasp()
 {
-    printf("coffee is waiting\n");
-    //sleep(next_coffee.hour);
-    printf("%d\n",next_coffee.hour );
-    printf("coffee is starting\n");
+	//getpid(i)
+    if(current_time > next_coffee.hour)
+    {
+    	current_time = next_coffee.hour;
+    	//kill(pid, SIGUSR1);
+    }
+    //pthread_create(&pwaiting, NULL, &waiting, (void*)current_time);
     write(raspfd,next_coffee.type,sizeof(next_coffee));
 }
 
@@ -194,9 +221,6 @@ int main(){
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     serv_addr.sin_port = htons(8080);
-
-    /* Ignore pipe signals */
-    signal(SIGPIPE, SIG_IGN);
 
     if(setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&value,sizeof(int)) < 0)
         perror("Fail reusing the same address");
