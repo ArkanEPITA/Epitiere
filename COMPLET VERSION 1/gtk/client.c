@@ -7,41 +7,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "interface.h"
 
-#define MAX 200
+#define MAXI 200
 #define PORT 8080
 #define SA struct sockaddr
 
-void func(int sockfd)
+char* func(int sockfd)
 {
   write(sockfd, "1", 1);
-  char buff[MAX];
+  char buff[MAXI];
   ssize_t r = 0;
   while(r == 0)
   {
-      memset(buff,0,MAX);
-      ssize_t r = 0;
+      memset(buff,0,MAXI);
+
       r = read(sockfd, buff, sizeof(buff));
       if(r != 0)
       {   
+        /*
           write(STDOUT_FILENO, buff, r);
           printf("\n");
+          */
+          printf("%s\n", buff);
       }
+
+      
       sleep(1);
   }
 
   int n = 0;
   
-  memset(buff,0,MAX);
+  memset(buff,0,MAXI);
   printf("Enter the string : ");
   while ((buff[n++] = getchar()) != '\n');
   write(sockfd, buff, sizeof(buff));
 
   printf("From Server : %s", buff);
+
+  return buff;
   
 }
 
-int main()
+char* client()
 {
   int sockfd;
   struct sockaddr_in servaddr;
@@ -58,7 +66,7 @@ int main()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("10.0.2.15");
+  servaddr.sin_addr.s_addr = inet_addr("192.168.0.49");
   servaddr.sin_port = htons(PORT);
 
   // connect the client socket to server socket
@@ -70,8 +78,11 @@ int main()
     printf("connected to the server..\n");
   //write(sockfd,"1",1);
   // function for chat
-  func(sockfd);
+  char* res = func(sockfd);
 
   // close the socket
   close(sockfd);
+
+
+  return res;
 }
