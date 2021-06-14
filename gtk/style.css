@@ -14,9 +14,10 @@
 
 #spinbutton1, #spinbutton2 {
     margin-top: 10px;
+    margin-right: 10px;
 }
 
-#label1, #label2{
+#label1, #label2, #label3{
     margin-top: 10px;
     color: white;
 }

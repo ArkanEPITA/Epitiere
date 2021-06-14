@@ -3,8 +3,9 @@
 
 
 struct GetVal{
-  GtkSpinButton *Spin1;
-  GtkSpinButton *Spin2;
+  GtkSpinButton *hours;
+  GtkSpinButton *minutes;
+  char* type;
   };
 
 struct GetVal Value;
@@ -55,8 +56,9 @@ int main(int argc, char* argv[])
 
 */
 
-  Value.Spin1 = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbutton1"));
-  Value.Spin2 = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbutton2"));
+  Value.hours = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbuttonHours"));
+  Value.minutes = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbuttonMinutes"));
+  Value.type = "short";
 
 
 	//Connect signals
@@ -72,10 +74,21 @@ int main(int argc, char* argv[])
 
 void on_validation_clicked()
 {
-  int hours = gtk_spin_button_get_value_as_int(Value.Spin1);
-  int minutes = gtk_spin_button_get_value_as_int(Value.Spin2);
+  int hours = gtk_spin_button_get_value_as_int(Value.hours);
+  int minutes = gtk_spin_button_get_value_as_int(Value.minutes);
 
   printf("Time set to %d:%d\n", hours, minutes);
+  printf("You will get a %s coffee\n", Value.type);
+}
+
+void on_Short_toggled()
+{
+  Value.type = "short";
+}
+
+void on_Long_toggled()
+{
+  Value.type = "long";
 }
 
 // called when window is closed

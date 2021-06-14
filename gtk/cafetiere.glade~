@@ -155,7 +155,7 @@
           </object>
           <packing>
             <property name="x">184</property>
-            <property name="y">140</property>
+            <property name="y">132</property>
           </packing>
         </child>
         <child>
@@ -171,7 +171,7 @@
           </object>
           <packing>
             <property name="x">349</property>
-            <property name="y">140</property>
+            <property name="y">132</property>
           </packing>
         </child>
       </object>
