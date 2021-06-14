@@ -117,17 +117,24 @@ void Get_Api(void *arg)
 	int min = 0;
 
 	get_json_file(get);
-    
+
     
 
     for(size_t i = 0; i < 10; i++)
     {
-        
+    	char act[BUFFER_SZ];
+    	char h[BUFFER_SZ];
+    	sprintf(h, "%d\n", get[i].heure);
+    	sprintf(act, "%d\n", get[i].activate);
+    	write(cli->connfd, strcat(get[i].type,"\n"), sizeof(char*));
+    	write(cli->connfd, h, sizeof(char*));
+    	write(cli->connfd, act, sizeof(char*));
+
         if(get[i].activate == 1)
         {
-        	write(cli->connfd,get,sizeof(get));
+        	//write(cli->connfd,get,sizeof(get));
         	int hour = get[i].heure;
-        	int  to_wait = coffee(hour / 100, hour % 100);
+        	int to_wait = coffee(hour / 100, hour % 100);
 
         	if(to_wait < current_time)
         	{
@@ -214,7 +221,7 @@ int main(){
     /* Socket settings */
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.1.29");
+    serv_addr.sin_addr.s_addr = inet_addr("192.168.0.36");
     serv_addr.sin_port = htons(8080);
 
     if(setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&value,sizeof(int)) < 0)
