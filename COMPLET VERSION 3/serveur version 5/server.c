@@ -118,17 +118,26 @@ void Get_Api(void *arg)
 
 	get_json_file(get);
 
-    
+    char json_file[BUFFER_SZ];
+    memset(json_file, 0, BUFFER_SZ);
 
     for(size_t i = 0; i < 10; i++)
-    {
+    {/*
     	char act[BUFFER_SZ];
     	char h[BUFFER_SZ];
+
     	sprintf(h, "%d\n", get[i].heure);
     	sprintf(act, "%d\n", get[i].activate);
+
     	write(cli->connfd, strcat(get[i].type,"\n"), sizeof(char*));
     	write(cli->connfd, h, sizeof(char*));
     	write(cli->connfd, act, sizeof(char*));
+*/
+        char tmp[BUFFER_SZ];
+        memset(tmp, 0, BUFFER_SZ);
+
+        sprintf(tmp, "%s\n%d\n%d\n", get[i].type, get[i].heure, get[i].activate);
+        strcat(json_file, tmp);
 
         if(get[i].activate == 1)
         {
@@ -150,6 +159,9 @@ void Get_Api(void *arg)
             
         }
     }
+
+    write(cli->connfd, json_file, BUFFER_SZ);
+    
     printf("get_api : %d\n", min_i);
     SendRasp();
     
@@ -222,7 +234,7 @@ int main(){
     /* Socket settings */
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.1.29");
+    serv_addr.sin_addr.s_addr = inet_addr("192.168.0.49");
     serv_addr.sin_port = htons(8080);
 
     if(setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&value,sizeof(int)) < 0)

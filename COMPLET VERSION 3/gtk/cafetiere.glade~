@@ -18,7 +18,6 @@
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
-    <property name="icon">../Data/logo.png</property>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
@@ -59,6 +58,7 @@
           </object>
           <packing>
             <property name="x">410</property>
+            <property name="y">29</property>
           </packing>
         </child>
         <child>
@@ -77,6 +77,7 @@
           </object>
           <packing>
             <property name="x">213</property>
+            <property name="y">29</property>
           </packing>
         </child>
         <child>
@@ -90,7 +91,7 @@
           </object>
           <packing>
             <property name="x">127</property>
-            <property name="y">15</property>
+            <property name="y">43</property>
           </packing>
         </child>
         <child>
@@ -104,7 +105,7 @@
           </object>
           <packing>
             <property name="x">315</property>
-            <property name="y">15</property>
+            <property name="y">43</property>
           </packing>
         </child>
         <child>
@@ -122,7 +123,7 @@
           </object>
           <packing>
             <property name="x">35</property>
-            <property name="y">27</property>
+            <property name="y">60</property>
           </packing>
         </child>
         <child>
@@ -146,6 +147,7 @@
         <child>
           <object class="GtkRadioButton" id="Short">
             <property name="label" translatable="yes">Short</property>
+            <property name="name">radiobuttonshort</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -155,12 +157,13 @@
           </object>
           <packing>
             <property name="x">184</property>
-            <property name="y">132</property>
+            <property name="y">140</property>
           </packing>
         </child>
         <child>
           <object class="GtkRadioButton" id="Long">
             <property name="label" translatable="yes">Long</property>
+            <property name="name">radiobuttonlong</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -171,8 +174,40 @@
           </object>
           <packing>
             <property name="x">349</property>
-            <property name="y">132</property>
+            <property name="y">140</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="coffeChooser">
+            <property name="width_request">120</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">10</property>
+            <property name="margin_top">10</property>
+            <property name="active">10</property>
+            <property name="has_entry">True</property>
+            <property name="active_id">1</property>
+            <items>
+              <item id="0" translatable="yes">coffee 1</item>
+              <item id="1" translatable="yes">coffee 2</item>
+              <item id="2" translatable="yes">coffee 3</item>
+              <item id="3" translatable="yes">coffee 4</item>
+              <item id="4" translatable="yes">coffee 5</item>
+              <item id="5" translatable="yes">coffee 6</item>
+              <item id="6" translatable="yes">coffee 7</item>
+              <item id="7" translatable="yes">coffee 8</item>
+              <item id="8" translatable="yes">coffee 9</item>
+              <item id="9" translatable="yes">coffee 10</item>
+            </items>
+            <child internal-child="entry">
+              <object class="GtkEntry" id="coffeeChooserEntry">
+                <property name="name">CoffeeChooserEntry</property>
+                <property name="can_focus">False</property>
+                <property name="text" translatable="yes">coffee 1</property>
+                <signal name="changed" handler="on_coffeeChooserEntry_changed" swapped="no"/>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>

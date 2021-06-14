@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <gtk/gtk.h>
+#include <string.h>
 
 
 
@@ -13,6 +14,11 @@ typedef struct {
 	GtkBuilder* builder;
 }Data;
 
-char* client();
+typedef struct {
+	int sockfd;
+	char* json_file;
+}Client;
+
+Client client();
 
 #endif

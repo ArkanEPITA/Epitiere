@@ -36,20 +36,21 @@ char* func(int sockfd)
       sleep(1);
   }
 
-  int n = 0;
+ // int n = 0;
   
   memset(buff,0,MAXI);
-  printf("Enter the string : ");
-  while ((buff[n++] = getchar()) != '\n');
+  //printf("Enter the string : ");
+
+  //while ((buff[n++] = getchar()) != '\n');
+
   write(sockfd, buff, sizeof(buff));
 
-  printf("From Server : %s", buff);
+  //printf("From Server : %s", buff);
 
   return buff;
-  
 }
 
-char* client()
+Client client()
 {
   int sockfd;
   struct sockaddr_in servaddr;
@@ -66,7 +67,7 @@ char* client()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("192.168.0.49");
+  servaddr.sin_addr.s_addr = inet_addr("192.168.0.35");
   servaddr.sin_port = htons(PORT);
 
   // connect the client socket to server socket
@@ -78,11 +79,13 @@ char* client()
     printf("connected to the server..\n");
   //write(sockfd,"1",1);
   // function for chat
-  char* res = func(sockfd);
+  char* json_file = func(sockfd);
+
+  printf("json file : %s\n", json_file);
 
   // close the socket
-  close(sockfd);
 
+  Client cli = { sockfd, json_file };
 
-  return res;
+  return cli;
 }

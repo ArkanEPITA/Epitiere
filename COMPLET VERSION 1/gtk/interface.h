@@ -13,6 +13,11 @@ typedef struct {
 	GtkBuilder* builder;
 }Data;
 
-char* client();
+typedef struct {
+	int sockfd;
+	char* json_file;
+}Client;
+
+Client client();
 
 #endif

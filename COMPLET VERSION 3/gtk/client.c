@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "interface.h"
 
 #define MAXI 200
@@ -18,38 +17,33 @@ char* func(int sockfd)
   write(sockfd, "1", 1);
   char buff[MAXI];
   ssize_t r = 0;
+
+  memset(buff, 0, MAXI);
   while(r == 0)
   {
-      memset(buff,0,MAXI);
 
       r = read(sockfd, buff, sizeof(buff));
-      if(r != 0)
-      {   
-        /*
-          write(STDOUT_FILENO, buff, r);
-          printf("\n");
-          */
-          printf("%s\n", buff);
-      }
-
       
       sleep(1);
   }
 
-  int n = 0;
-  
-  memset(buff,0,MAXI);
+  //char* res = buff;
+ // int n = 0;
+
   //printf("Enter the string : ");
+
   //while ((buff[n++] = getchar()) != '\n');
-  //write(sockfd, buff, sizeof(buff));
 
-  printf("From Server : %s\n", buff);
+  write(sockfd, buff, sizeof(buff));
 
-  return buff;
-  
+  char* res = buff;
+  //printf("From Server : %s", buff);
+  //printf("res = %s\n", res);
+
+  return res;
 }
 
-char* client()
+Client client()
 {
   int sockfd;
   struct sockaddr_in servaddr;
@@ -76,13 +70,15 @@ char* client()
   }
   else
     printf("connected to the server..\n");
+
   //write(sockfd,"1",1);
   // function for chat
-  char* res = func(sockfd);
 
-  // close the socket
-  close(sockfd);
+  char* json_file = func(sockfd);
 
+  //printf("json file : %s\n", json_file);
 
-  return res;
+  Client cli = { sockfd, json_file };
+
+  return cli;
 }

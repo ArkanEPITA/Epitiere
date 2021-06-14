@@ -9,13 +9,13 @@ struct GetVal{
   };
 
 struct GetVal Value;
+int sockfd;
 
 
-
-int main(int argc, char* argv[])
+void create_window(int argc, char* argv[], char* json_file)
 {
 
-
+  printf("%s\n", json_file);
 
   //Init variables
   GtkWidget *main_window;
@@ -82,16 +82,37 @@ int main(int argc, char* argv[])
   Value.type = "short";
 
 
+
 	//Connect signals
 	gtk_builder_connect_signals(data.builder, &data);
 
   gtk_window_set_title(GTK_WINDOW(main_window), "Epitière");
   gtk_widget_show_all(main_window);
   gtk_main();
+}
 
 
-  char* json_file = client();
-  //printf("%s\n", json_file);
+char* client_mover()
+{
+  printf("client mover\n");
+  Client cli = client();
+
+  char* tst = cli.json_file;
+
+  //printf("%s\n", cli.json_file);
+  printf("client id: %d\n", cli.sockfd);
+
+  sockfd = cli.sockfd;
+
+  return tst;
+}
+
+
+int main(int argc, char* argv[])
+{
+  printf("main\n");
+  char* json_file = client_mover();
+  create_window(argc, argv, json_file);
 
   return EXIT_SUCCESS;
 }
@@ -117,7 +138,8 @@ void on_Long_toggled()
 }
 
 // called when window is closed
-void on_window_main_destroy()
+void on_main_window_destroy()
 {
+  close(sockfd);
   gtk_main_quit();
 }
