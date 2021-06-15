@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
   gtk_main();
 
 
-  char* json_file = client();
+  //char* json_file = client();
   //printf("%s\n", json_file);
 
   return EXIT_SUCCESS;
@@ -104,6 +104,7 @@ void on_validation_clicked()
 
   printf("Time set to %d:%d\n", hours, minutes);
   printf("You will get a %s coffee\n", Value.type);
+  char* json_file = client();
 }
 
 void on_Short_toggled()

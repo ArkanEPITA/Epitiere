@@ -234,7 +234,7 @@ int main(){
     /* Socket settings */
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.0.49");
+    serv_addr.sin_addr.s_addr = inet_addr("10.0.2.15");
     serv_addr.sin_port = htons(8080);
 
     if(setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&value,sizeof(int)) < 0)
