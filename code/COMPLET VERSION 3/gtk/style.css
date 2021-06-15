@@ -26,10 +26,11 @@
     color: white;
 }
 
-entry.enable{
+
+#coffeeChooser.coffee1{
     color: green;
 }
 
-entry.disable{
+.disable{
     color: red;
 }

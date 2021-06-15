@@ -46,7 +46,10 @@ void create_window(int argc, char* argv[], char* json_file)
   GtkComboBox *coffeeEntry = GTK_COMBO_BOX(gtk_builder_get_object(data.builder, "coffeeChooser"));
   //GtkEntry *entry = GTK_ENTRY(gtk_builder_get_object(data.builder, "entry"));
   
-
+/*
+  GtkEntry *coffee1 = gtk_combo_box_get_active(coffeeEntry);
+  printf("entry1 = %s\n", gtk_entry_get_text(coffee1));
+*/
   Value.hours = spinbuttonHours;
   Value.minutes = spinbuttonMinutes;
   Value.shortButton = shortButton;
@@ -60,6 +63,8 @@ void create_window(int argc, char* argv[], char* json_file)
   GtkCssProvider *cssProvider = gtk_css_provider_new();
   gtk_css_provider_load_from_path(cssProvider, "style.css", NULL);
   gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+
 
 
   for (int i = 0; i < 30; ++i)
@@ -161,12 +166,12 @@ void create_window(int argc, char* argv[], char* json_file)
 
 
 
-
-
   //Color the entry of the combobox
-  //widget.get_style_context().add_class("enable")
-  //widget.get_style_context().add_class("disable")
-
+/*
+  GtkStyleContext *context;
+  context = gtk_widget_get_style_context(main_window);
+  gtk_style_context_add_class(context,"enter_button");
+*/
 
 
 
