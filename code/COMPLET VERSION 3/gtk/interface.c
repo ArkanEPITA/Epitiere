@@ -245,6 +245,7 @@ void on_validation_clicked()
 // called when window is closed
 void on_main_window_destroy()
 {
+  write(sockfd, "closed", 6);
   close(sockfd);
   gtk_main_quit();
 }

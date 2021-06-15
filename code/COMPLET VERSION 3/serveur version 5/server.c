@@ -220,6 +220,12 @@ void *handle_client(void *arg)
     {
         /* checks if the connection with the client has not been interrupted */
         r = read(cli->connfd, buff, sizeof(buff));
+
+        if (strcmp(buff, "closed") == 0)
+        {
+            break;
+        }
+
         printf("\n===========\nbuff = \n%s\n===========\n",buff);
         if(r != 0)
         {
