@@ -25,3 +25,11 @@
 #radiobuttonshort, #radiobuttonlong, #radiobuttonEnable, #radiobuttonDisable {
     color: white;
 }
+
+entry.enable{
+    color: green;
+}
+
+entry.disable{
+    color: red;
+}
