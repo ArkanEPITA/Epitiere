@@ -6,50 +6,45 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "interface.h"
 
 #define MAXI 200
 #define PORT 8080
 #define SA struct sockaddr
 
+#define ip_address "192.168.0.49"
+
 char* func(int sockfd)
 {
   write(sockfd, "1", 1);
   char buff[MAXI];
   ssize_t r = 0;
+
+  memset(buff, 0, MAXI);
+
+  ssize_t buff_size = 0;;
   while(r == 0)
   {
-      memset(buff,0,MAXI);
 
-      r = read(sockfd, buff, sizeof(buff));
-      if(r != 0)
-      {   
-        /*
-          write(STDOUT_FILENO, buff, r);
-          printf("\n");
-          */
-          printf("%s\n", buff);
-      }
-
+      r = read(sockfd, &buff, sizeof(buff));
       
+      buff_size += r;
       sleep(1);
   }
 
-  int n = 0;
-  
-  memset(buff,0,MAXI);
-  //printf("Enter the string : ");
-  //while ((buff[n++] = getchar()) != '\n');
-  //write(sockfd, buff, sizeof(buff));
+  char* res = calloc(buff_size, sizeof(char));
+  for (ssize_t i = 0; i < buff_size; ++i)
+  {
+  	res[i] = buff[i];
+  }
 
-  printf("From Server : %s\n", buff);
+  //printf("From Server : %s", buff);
+  //printf("res = %s\n", res);
 
-  return buff;
-  
+  return res;
 }
 
-char* client()
+Client client()
 {
   int sockfd;
   struct sockaddr_in servaddr;
@@ -66,7 +61,7 @@ char* client()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("10.0.2.15");
+  servaddr.sin_addr.s_addr = inet_addr(ip_address);
   servaddr.sin_port = htons(PORT);
 
   // connect the client socket to server socket
@@ -76,13 +71,16 @@ char* client()
   }
   else
     printf("connected to the server..\n");
+
   //write(sockfd,"1",1);
   // function for chat
-  char* res = func(sockfd);
 
-  // close the socket
-  close(sockfd);
+  char* json_file = func(sockfd);
 
 
-  return res;
+  //printf("json file : %s\n", json_file);
+
+  Client cli = { sockfd, json_file };
+
+  return cli;
 }
