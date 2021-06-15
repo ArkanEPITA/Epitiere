@@ -19,6 +19,8 @@ typedef struct {
 	char* json_file;
 }Client;
 
+
+
 Client client();
 
 #endif

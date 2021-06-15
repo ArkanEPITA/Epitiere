@@ -160,7 +160,7 @@ void Get_Api(void *arg)
         }
     }
 
-    write(cli->connfd, json_file, BUFFER_SZ);
+    write(cli->connfd, json_file, sizeof(json_file));
     
     printf("get_api : %d\n", min_i);
     SendRasp();

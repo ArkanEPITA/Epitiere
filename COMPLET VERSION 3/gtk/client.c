@@ -19,24 +19,23 @@ char* func(int sockfd)
   ssize_t r = 0;
 
   memset(buff, 0, MAXI);
+
+  ssize_t buff_size = 0;;
   while(r == 0)
   {
 
-      r = read(sockfd, buff, sizeof(buff));
+      r = read(sockfd, &buff, sizeof(buff));
       
+      buff_size += r;
       sleep(1);
   }
 
-  //char* res = buff;
- // int n = 0;
+  char* res = calloc(buff_size, sizeof(char));
+  for (ssize_t i = 0; i < buff_size; ++i)
+  {
+  	res[i] = buff[i];
+  }
 
-  //printf("Enter the string : ");
-
-  //while ((buff[n++] = getchar()) != '\n');
-
-  write(sockfd, buff, sizeof(buff));
-
-  char* res = buff;
   //printf("From Server : %s", buff);
   //printf("res = %s\n", res);
 
@@ -75,6 +74,7 @@ Client client()
   // function for chat
 
   char* json_file = func(sockfd);
+
 
   //printf("json file : %s\n", json_file);
 

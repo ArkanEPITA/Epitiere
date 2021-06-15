@@ -15,8 +15,7 @@ int sockfd;
 void create_window(int argc, char* argv[], char* json_file)
 {
 
-  printf("%s\n", json_file);
-
+  //printf("json file : %s\n", json_file);
   //Init variables
   GtkWidget *main_window;
   Data data;
@@ -41,7 +40,7 @@ void create_window(int argc, char* argv[], char* json_file)
   gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 
-/*
+
   char* coffees[30];
   int posCoffee = 0;
   int c = 0;
@@ -53,22 +52,26 @@ void create_window(int argc, char* argv[], char* json_file)
 
   while(posCoffee < 30)
   {
+    //printf("%c\n", json_file[c]);
     if(json_file[c] == '\n')
     {
       coffees[posCoffee] = tmp;
-      posCoffee++;
+      //printf("%d\n", posCoffee);
       posc = 0;
       printf("%s\n", coffees[posCoffee]);
+      posCoffee++;
+      //printf("%s\n", tmp);
       memset(tmp, 0, 5);
     }
     else
     {
       tmp[posc] = json_file[c];
+      posc++;
     }
     c++;
   }
 
-*/
+
 /*
   //Get the list of the coffee with the API
   //TODO
