@@ -212,22 +212,25 @@ void *handle_client(void *arg)
     printf(" referenced by %d\n", cli->id);
     
 
-    char buff[2];
+    char buff[BUFFER_SZ];
 	bzero(buff, sizeof(buff));
 	ssize_t r = -1;
 
-    /* checks if the connection with the client has not been interrupted */
-    r = read(cli->connfd, buff, sizeof(buff));
-    if(r != 0)
+    while(1)
     {
-        /* call the Get_Api() function */
-        pthread_mutex_lock(&api_mutex);
-        printf("buff = %s\n",buff);
-        Get_Api(cli);
-        pthread_mutex_unlock(&api_mutex);
+        /* checks if the connection with the client has not been interrupted */
+        r = read(cli->connfd, buff, sizeof(buff));
+        printf("\n===========\nbuff = \n%s\n===========\n",buff);
+        if(r != 0)
+        {
+            /* call the Get_Api() function */
+            pthread_mutex_lock(&api_mutex);
+            Get_Api(cli);
+            pthread_mutex_unlock(&api_mutex);
+        }
+        memset(buff,0,sizeof(buff));
+        sleep(1);
     }
-	
-    
 
     /* Delete client from queue and yield thread */
     queue_delete(cli->id);

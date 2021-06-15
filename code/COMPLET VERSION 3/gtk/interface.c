@@ -209,11 +209,8 @@ void on_validation_clicked()
   printf("type = %s\n", type);
   printf("time = %d", hours);
   printf("%d\n\n", minutes);
-
-  sprintf(res, "%s\n%d\n%s\n%d%02d", id, active, type, hours, minutes);
-
-  printf("res:\n%s\n", res);
   */
+  sprintf(res, "%s\n%d\n%s\n%d%02d", id, active, type, hours, minutes);
 
   write(sockfd, res, strlen(res));
 }
