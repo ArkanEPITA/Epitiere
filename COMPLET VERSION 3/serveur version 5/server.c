@@ -16,6 +16,8 @@
 #define MAX_CLIENTS 100
 #define BUFFER_SZ 2048
 
+#define ip_address "192.168.0.49"
+
 static _Atomic unsigned int cli_count = 0;
 static int id = 10;
  
@@ -234,7 +236,7 @@ int main(){
     /* Socket settings */
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("10.0.2.15");
+    serv_addr.sin_addr.s_addr = inet_addr(ip_address);
     serv_addr.sin_port = htons(8080);
 
     if(setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&value,sizeof(int)) < 0)
