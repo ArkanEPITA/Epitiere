@@ -12,7 +12,7 @@
 #define PORT 8080
 #define SA struct sockaddr
 
-#define ip_address "192.168.0.49"
+#define ip_address INADDR_ANY
 
 char* func(int sockfd)
 {
@@ -61,7 +61,8 @@ Client client()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr(ip_address);
+  servaddr.sin_addr.s_addr = inet_addr("10.0.2.15");
+  //servaddr.sin_addr.s_addr = INADDR_ANY;
   servaddr.sin_port = htons(PORT);
 
   // connect the client socket to server socket

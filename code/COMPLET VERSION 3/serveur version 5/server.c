@@ -13,6 +13,9 @@
 #include "time.h"
 #include <jansson.h>
 
+#include <netdb.h>
+#include <ifaddrs.h>
+
 #define MAX_CLIENTS 100
 #define BUFFER_SZ 2048
 
@@ -51,10 +54,38 @@ next next_coffee;
 
 client_t *clients[MAX_CLIENTS];
 
+char HOSTNAME[NI_MAXHOST];
+
 pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 pthread_mutex_t api_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+
+void get_ip()
+{
+	struct ifaddrs *addr, *intf;
+    int family;
+    
+    if (getifaddrs(&intf) == -1) {
+        perror("getifaddrs");
+        exit(EXIT_FAILURE);
+    }
+    for (addr = intf; addr != NULL; addr = addr->ifa_next) {
+        family = addr->ifa_addr->sa_family;
+    //AF_INET est la famille d'adresses pour IPv4
+        if (family == AF_INET) {
+          //getnameinfo permet la résolution de noms.
+          getnameinfo(addr->ifa_addr, 
+                          sizeof(struct sockaddr_in),
+                          HOSTNAME, 
+                          NI_MAXHOST, 
+                          NULL, 
+                          0, 
+                          NI_NUMERICHOST);
+          //printf("<interface>: %s \t <adresse> %s\n", addr->ifa_name, HOSTNAME);
+        }
+    }
+}
 
 /* Add client to queue */
 void queue_add(client_t *cl){
@@ -229,7 +260,12 @@ int main(){
     /* Socket settings */
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.1.29");
+
+    get_ip();
+
+    printf("IP server: %s\n", HOSTNAME);
+
+    serv_addr.sin_addr.s_addr = inet_addr(HOSTNAME);
     serv_addr.sin_port = htons(8080);
 
     if(setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&value,sizeof(int)) < 0)
