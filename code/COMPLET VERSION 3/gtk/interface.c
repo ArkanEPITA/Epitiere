@@ -5,11 +5,15 @@
 struct GetVal{
   GtkSpinButton *hours;
   GtkSpinButton *minutes;
-  char* type;
+  GtkToggleButton *shortButton;
+  GtkToggleButton *enableButton;
+  GtkComboBox *comboboxEntry;
   };
 
 struct GetVal Value;
+
 int sockfd;
+char list[30][6];
 
 
 void create_window(int argc, char* argv[], char* json_file)
@@ -35,8 +39,17 @@ void create_window(int argc, char* argv[], char* json_file)
   GtkSpinButton *spinbuttonMinutes = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbuttonMinutes"));
   GtkToggleButton *shortButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "Short"));
   GtkToggleButton *longButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "Long"));
+  GtkToggleButton *enableButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "radiobuttonEnabled"));
+  //GtkToggleButton *disableButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "radiobuttonDisabled"));
+  GtkComboBox *coffeeEntry = GTK_COMBO_BOX(gtk_builder_get_object(data.builder, "coffeeChooser"));
+  //GtkEntry *entry = GTK_ENTRY(gtk_builder_get_object(data.builder, "entry"));
+  
 
-
+  Value.hours = spinbuttonHours;
+  Value.minutes = spinbuttonMinutes;
+  Value.shortButton = shortButton;
+  Value.enableButton = enableButton;
+  Value.comboboxEntry = coffeeEntry;
 
 
   //link w/ css file
@@ -45,11 +58,11 @@ void create_window(int argc, char* argv[], char* json_file)
   gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 
-  char coffees[30][6];
   for (int i = 0; i < 30; ++i)
   {
-      memset(coffees[i], 0, 6);
+      memset(list[i], 0, 6);
   }
+
   int posCoffee = 0;
   int c = 0;
   int posc = 0;
@@ -64,36 +77,37 @@ void create_window(int argc, char* argv[], char* json_file)
     {
       posc = 0;
 
-      //printf("%s\n", coffees[posCoffee]);
+      //printf("%s\n", list[posCoffee]);
       posCoffee++;
     }
     else
     {
-      coffees[posCoffee][posc] = json_file[c];
+      list[posCoffee][posc] = json_file[c];
       posc++;
     }
     c++;
   }
 
   
+/*
+
   for(int i = 0; i < 30; i++)
   {
-    printf("%s\n", coffees[i]);
+    printf("%s\n", list[i]);
   }
 
-
-
+*/
 
 
   char* type = calloc(5, sizeof(char));
-  type = coffees[0];
+  type = list[0];
   char* time = calloc(4, sizeof(char));
-  time = coffees[1];
+  time = list[1];
   char* activate = calloc(1, sizeof(char));
-  activate = coffees[2];
+  activate = list[2];
 
   //printf("\ntime = %s\ntype = %s\nactivate = %s\n", time, type, activate);
-  //printf("coffees[0] = %s\n", coffees[0]);
+  //printf("list[0] = %s\n", list[0]);
 
   char* h = calloc(2, sizeof(char));
   strncpy(h, time, 2);
@@ -103,6 +117,9 @@ void create_window(int argc, char* argv[], char* json_file)
 
 
   //printf("%s:%s\n", h, min);
+
+  //Set the active id
+  gtk_combo_box_set_active_id(coffeeEntry, "0");
 
 
   //Set the value of the spinbuttonHours to hours
@@ -129,9 +146,8 @@ void create_window(int argc, char* argv[], char* json_file)
 
 
 
-  Value.hours = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbuttonHours"));
-  Value.minutes = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbuttonMinutes"));
-  Value.type = "short";
+
+
 
 	//Connect signals
 	gtk_builder_connect_signals(data.builder, &data);
@@ -163,19 +179,53 @@ void on_validation_clicked()
 {
   int hours = gtk_spin_button_get_value_as_int(Value.hours);
   int minutes = gtk_spin_button_get_value_as_int(Value.minutes);
+  char* id = (char*)gtk_combo_box_get_active_id(Value.comboboxEntry);
+  int active;
+  char* type;
 
-  printf("Time set to %d:%d\n", hours, minutes);
-  printf("You will get a %s coffee\n", Value.type);
+  gboolean act = gtk_toggle_button_get_active(Value.enableButton);
+  if(act)
+  {
+    active = 1;
+  }
+  else
+  {
+    active = 0;
+  }
+
+  gboolean typ = gtk_toggle_button_get_active(Value.shortButton);
+  if(typ)
+  {
+    type = "court";
+  }
+  else
+  {
+    type = "long";
+  }
+  char* res = calloc(15, sizeof(char));
+  /*
+  printf("id = %s\n", id);
+  printf("active = %d\n", active);
+  printf("type = %s\n", type);
+  printf("time = %d", hours);
+  printf("%d\n\n", minutes);
+
+  sprintf(res, "%s\n%d\n%s\n%d%02d", id, active, type, hours, minutes);
+
+  printf("res:\n%s\n", res);
+  */
+
+  write(sockfd, res, strlen(res));
 }
 
 void on_Short_toggled()
 {
-  Value.type = "short";
+  
 }
 
 void on_Long_toggled()
 {
-  Value.type = "long";
+  
 }
 
 // called when window is closed
@@ -183,4 +233,19 @@ void on_main_window_destroy()
 {
   close(sockfd);
   gtk_main_quit();
+}
+
+void on_radiobuttonDisabled_toggled()
+{
+  printf("Disabled\n");
+}
+
+void on_radiobuttonEnabled_toggled()
+{
+  printf("Enabled\n");
+}
+
+void on_coffeeChooserEntry_changed()
+{
+  printf("Entry changed\n");
 }

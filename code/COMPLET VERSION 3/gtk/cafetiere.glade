@@ -40,7 +40,7 @@
           </object>
           <packing>
             <property name="x">37</property>
-            <property name="y">181</property>
+            <property name="y">267</property>
           </packing>
         </child>
         <child>
@@ -58,7 +58,7 @@
           </object>
           <packing>
             <property name="x">410</property>
-            <property name="y">29</property>
+            <property name="y">41</property>
           </packing>
         </child>
         <child>
@@ -76,36 +76,32 @@
             <property name="climb_rate">2.2351741811588166e-10</property>
           </object>
           <packing>
-            <property name="x">213</property>
-            <property name="y">29</property>
+            <property name="x">219</property>
+            <property name="y">41</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="Hours">
             <property name="name">label1</property>
-            <property name="width_request">100</property>
-            <property name="height_request">80</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Hours:</property>
           </object>
           <packing>
-            <property name="x">127</property>
-            <property name="y">43</property>
+            <property name="x">155</property>
+            <property name="y">82</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="Minutes">
             <property name="name">label2</property>
-            <property name="width_request">100</property>
-            <property name="height_request">80</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Minutes:</property>
           </object>
           <packing>
-            <property name="x">315</property>
-            <property name="y">43</property>
+            <property name="x">334</property>
+            <property name="y">82</property>
           </packing>
         </child>
         <child>
@@ -118,12 +114,12 @@
               <attribute name="weight" value="bold"/>
               <attribute name="variant" value="normal"/>
               <attribute name="stretch" value="normal"/>
-              <attribute name="scale" value="2"/>
+              <attribute name="scale" value="1"/>
             </attributes>
           </object>
           <packing>
-            <property name="x">35</property>
-            <property name="y">60</property>
+            <property name="x">52</property>
+            <property name="y">82</property>
           </packing>
         </child>
         <child>
@@ -136,12 +132,12 @@
               <attribute name="weight" value="bold"/>
               <attribute name="variant" value="normal"/>
               <attribute name="stretch" value="normal"/>
-              <attribute name="scale" value="2"/>
+              <attribute name="scale" value="1"/>
             </attributes>
           </object>
           <packing>
-            <property name="x">35</property>
-            <property name="y">120</property>
+            <property name="x">52</property>
+            <property name="y">154</property>
           </packing>
         </child>
         <child>
@@ -156,8 +152,8 @@
             <signal name="toggled" handler="on_Short_toggled" swapped="no"/>
           </object>
           <packing>
-            <property name="x">184</property>
-            <property name="y">140</property>
+            <property name="x">180</property>
+            <property name="y">164</property>
           </packing>
         </child>
         <child>
@@ -174,11 +170,12 @@
           </object>
           <packing>
             <property name="x">349</property>
-            <property name="y">140</property>
+            <property name="y">164</property>
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="coffeChooser">
+          <object class="GtkComboBoxText" id="coffeeChooser">
+            <property name="name">coffeeChooser</property>
             <property name="width_request">120</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -186,7 +183,7 @@
             <property name="margin_top">10</property>
             <property name="active">10</property>
             <property name="has_entry">True</property>
-            <property name="active_id">1</property>
+            <property name="active_id">-1</property>
             <items>
               <item id="0" translatable="yes">coffee 1</item>
               <item id="1" translatable="yes">coffee 2</item>
@@ -208,6 +205,57 @@
               </object>
             </child>
           </object>
+        </child>
+        <child>
+          <object class="GtkRadioButton" id="radiobuttonEnabled">
+            <property name="label" translatable="yes">Enable</property>
+            <property name="name">radiobuttonEnable</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="active">True</property>
+            <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_radiobuttonEnabled_toggled" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">180</property>
+            <property name="y">222</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkRadioButton" id="radiobuttonDisabled">
+            <property name="label" translatable="yes">Disable</property>
+            <property name="name">radiobuttonDisable</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="active">True</property>
+            <property name="draw_indicator">True</property>
+            <property name="group">radiobuttonEnabled</property>
+            <signal name="toggled" handler="on_radiobuttonDisabled_toggled" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">349</property>
+            <property name="y">222</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="ACTIVATE">
+            <property name="name">label3</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">ACTIVATE:</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+              <attribute name="variant" value="normal"/>
+              <attribute name="stretch" value="normal"/>
+              <attribute name="scale" value="1"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">52</property>
+            <property name="y">212</property>
+          </packing>
         </child>
       </object>
     </child>
