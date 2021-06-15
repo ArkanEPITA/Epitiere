@@ -6,8 +6,10 @@ struct GetVal{
   GtkSpinButton *hours;
   GtkSpinButton *minutes;
   GtkToggleButton *shortButton;
+  GtkToggleButton *longButton;
   GtkToggleButton *enableButton;
-  GtkComboBox *comboboxEntry;
+  GtkToggleButton *disableButton;
+  GtkComboBox *comboboxCoffee;
   };
 
 struct GetVal Value;
@@ -40,7 +42,7 @@ void create_window(int argc, char* argv[], char* json_file)
   GtkToggleButton *shortButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "Short"));
   GtkToggleButton *longButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "Long"));
   GtkToggleButton *enableButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "radiobuttonEnabled"));
-  //GtkToggleButton *disableButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "radiobuttonDisabled"));
+  GtkToggleButton *disableButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "radiobuttonDisabled"));
   GtkComboBox *coffeeEntry = GTK_COMBO_BOX(gtk_builder_get_object(data.builder, "coffeeChooser"));
   //GtkEntry *entry = GTK_ENTRY(gtk_builder_get_object(data.builder, "entry"));
   
@@ -48,8 +50,10 @@ void create_window(int argc, char* argv[], char* json_file)
   Value.hours = spinbuttonHours;
   Value.minutes = spinbuttonMinutes;
   Value.shortButton = shortButton;
+  Value.longButton = longButton;
   Value.enableButton = enableButton;
-  Value.comboboxEntry = coffeeEntry;
+  Value.disableButton = disableButton;
+  Value.comboboxCoffee = coffeeEntry;
 
 
   //link w/ css file
@@ -144,7 +148,24 @@ void create_window(int argc, char* argv[], char* json_file)
   }
 
 
+  int act = atoi(activate);
+  if(act == 0)
+  {
+    gtk_toggle_button_set_active(disableButton, TRUE);
+  }
+  else
+  {
+    gtk_toggle_button_set_active(enableButton, TRUE);
+  }
 
+
+
+
+
+
+  //Color the entry of the combobox
+  //widget.get_style_context().add_class("enable")
+  //widget.get_style_context().add_class("disable")
 
 
 
@@ -179,7 +200,7 @@ void on_validation_clicked()
 {
   int hours = gtk_spin_button_get_value_as_int(Value.hours);
   int minutes = gtk_spin_button_get_value_as_int(Value.minutes);
-  char* id = (char*)gtk_combo_box_get_active_id(Value.comboboxEntry);
+  char* id = (char*)gtk_combo_box_get_active_id(Value.comboboxCoffee);
   int active;
   char* type;
 
@@ -202,28 +223,24 @@ void on_validation_clicked()
   {
     type = "long";
   }
+
   char* res = calloc(15, sizeof(char));
-  /*
+
+/*
   printf("id = %s\n", id);
   printf("active = %d\n", active);
   printf("type = %s\n", type);
   printf("time = %d", hours);
   printf("%d\n\n", minutes);
-  */
-  sprintf(res, "%s\n%d\n%s\n%d%02d", id, active, type, hours, minutes);
+*/
 
+
+  sprintf(res, "%s\n%d\n%s\n%d%02d", id, active, type, hours, minutes);
+  printf("res:\n%s\n", res);
+  
   write(sockfd, res, strlen(res));
 }
 
-void on_Short_toggled()
-{
-  
-}
-
-void on_Long_toggled()
-{
-  
-}
 
 // called when window is closed
 void on_main_window_destroy()
@@ -232,17 +249,61 @@ void on_main_window_destroy()
   gtk_main_quit();
 }
 
-void on_radiobuttonDisabled_toggled()
-{
-  printf("Disabled\n");
-}
-
-void on_radiobuttonEnabled_toggled()
-{
-  printf("Enabled\n");
-}
 
 void on_coffeeChooserEntry_changed()
 {
-  printf("Entry changed\n");
+  char* id = (char*)gtk_combo_box_get_active_id(Value.comboboxCoffee);
+  int pos = atoi(id);
+
+  char* type = calloc(5, sizeof(char));
+  type = list[pos*3];
+  char* time = calloc(4, sizeof(char));
+  time = list[pos*3+1];
+  char* activate = calloc(1, sizeof(char));
+  activate = list[pos*3+2];
+
+  //printf("\ntime = %s\ntype = %s\nactivate = %s\n", time, type, activate);
+  //printf("list[0] = %s\n", list[0]);
+
+  char* h = calloc(2, sizeof(char));
+  strncpy(h, time, 2);
+
+  char* min = calloc(2, sizeof(char));
+  strncpy(min, time+2, 2);
+
+
+
+
+  //Set the value of the spinbuttonHours to hours
+  int hours = atoi(h);
+  gtk_spin_button_set_value(Value.hours, hours);
+
+  //Set the value of the spinbutton2 to minutes
+  int minutes = atoi(min);
+  gtk_spin_button_set_value(Value.minutes, minutes);
+
+
+  int ret1 = strncmp(type, "long", 4);
+  int ret2 = strncmp(type, "court", 5);
+
+  if(ret1 == 0)
+  {
+    gtk_toggle_button_set_active(Value.longButton, TRUE);
+  }
+  else if(ret2 == 0)
+  {
+    gtk_toggle_button_set_active(Value.shortButton, TRUE);
+  }
+
+
+  int act = atoi(activate);
+  if(act == 0)
+  {
+    gtk_toggle_button_set_active(Value.disableButton, TRUE);
+  }
+  else
+  {
+    gtk_toggle_button_set_active(Value.enableButton, TRUE);
+  }
+
 }
