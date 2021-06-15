@@ -1,14 +1,15 @@
 CC = gcc
-CFLAGS = `pkg-config --cflags glib-2.0` -Wall -Wextra -pthread
-LDLIBS = `pkg-config --libs glib-2.0`
+CFLAGS = -Wall -Wextra -pthread
+LDLIBS = -ljansson -pthread
 
-EXE = chat_server client
 
-all: $(EXE)
+SRC = time.c ../API/json.c server.c
+OBJ = $(SRC:.c=.o)
+DEP = $(SRC:.c=.d)
 
-$(foreach f, $(EXE), $(eval $(f):))
+all: server
 
-.PHONY: clean
+server : $(OBJ)
 
 clean:
-	${RM} $(EXE)
+	${RM} $(OBJ) $(OBJ_TESTS) $(DEP) $(DEP_TESTS) server && clear

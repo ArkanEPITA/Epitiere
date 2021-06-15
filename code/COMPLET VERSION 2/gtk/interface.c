@@ -41,13 +41,12 @@ void create_window(int argc, char* argv[], char* json_file)
   gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 
-/*
+
   char* coffees[30];
   int posCoffee = 0;
   int c = 0;
   int posc = 0;
 
-  char delim[] = "\n";
   char tmp[5];
   memset(tmp, 0, 5);
 
@@ -64,11 +63,12 @@ void create_window(int argc, char* argv[], char* json_file)
     else
     {
       tmp[posc] = json_file[c];
+      posc += 1;
     }
     c++;
   }
 
-*/
+
 /*
   //Get the list of the coffee with the API
   //TODO
@@ -139,6 +139,7 @@ void on_validation_clicked()
 
   printf("Time set to %d:%d\n", hours, minutes);
   printf("You will get a %s coffee\n", Value.type);
+  write(sockfd, "1", 1);
 }
 
 void on_Short_toggled()
