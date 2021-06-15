@@ -31,6 +31,13 @@ void func(int sockfd)
 
 int main()
 {
+  char buff[NI_MAXHOST];
+  int n = 0;
+  
+  bzero(buff, sizeof(buff));
+  printf("Enter the IP server : ");
+  while ((buff[n++] = getchar()) != '\n');
+
   int sockfd;
   struct sockaddr_in servaddr;
 
@@ -46,7 +53,7 @@ int main()
 
   // assign IP, PORT
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("10.0.2.15");
+  servaddr.sin_addr.s_addr = inet_addr(buff);
   //servaddr.sin_addr.s_addr = INADDR_ANY;
   servaddr.sin_port = htons(PORT);
 
