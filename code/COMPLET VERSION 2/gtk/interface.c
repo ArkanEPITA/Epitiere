@@ -41,9 +41,34 @@ void create_window(int argc, char* argv[], char* json_file)
   gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 
+/*
+  char* coffees[30];
+  int posCoffee = 0;
+  int c = 0;
+  int posc = 0;
 
+  char delim[] = "\n";
+  char tmp[5];
+  memset(tmp, 0, 5);
 
+  while(posCoffee < 30)
+  {
+    if(json_file[c] == '\n')
+    {
+      coffees[posCoffee] = tmp;
+      posCoffee++;
+      posc = 0;
+      printf("%s\n", coffees[posCoffee]);
+      memset(tmp, 0, 5);
+    }
+    else
+    {
+      tmp[posc] = json_file[c];
+    }
+    c++;
+  }
 
+*/
 /*
   //Get the list of the coffee with the API
   //TODO
@@ -81,8 +106,6 @@ void create_window(int argc, char* argv[], char* json_file)
   Value.minutes = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbuttonMinutes"));
   Value.type = "short";
 
-
-
 	//Connect signals
 	gtk_builder_connect_signals(data.builder, &data);
 
@@ -94,23 +117,14 @@ void create_window(int argc, char* argv[], char* json_file)
 
 char* client_mover()
 {
-  printf("client mover\n");
   Client cli = client();
-
-  char* tst = cli.json_file;
-
-  //printf("%s\n", cli.json_file);
-  printf("client id: %d\n", cli.sockfd);
-
   sockfd = cli.sockfd;
-
-  return tst;
+  return cli.json_file;
 }
 
 
 int main(int argc, char* argv[])
 {
-  printf("main\n");
   char* json_file = client_mover();
   create_window(argc, argv, json_file);
 

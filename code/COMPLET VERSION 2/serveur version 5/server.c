@@ -18,21 +18,15 @@
 
 static _Atomic unsigned int cli_count = 0;
 static int id = 10;
-/*
+ 
 pthread_t pwaiting;
-void my_handler(int signum)
-{
-    if (signum == SIGUSR1)
-    {
-        printf("Received SIGUSR1!\n");
-    }
-}
 
-signal(SIGUSR1, my_handler);
-*/
-/* Raspberry fd */
-int raspfd;
-int current_time = 9999999;
+/* Raspberry structure */
+typedef struct{
+    int raspfd;
+    int current_time;
+}Rasp;
+
 
 /* Client structure */
 typedef struct {
@@ -48,6 +42,8 @@ typedef struct{
 	int index;
 	char* type;
 }next;
+
+Rasp rasp;
 
 next next_coffee;
 
@@ -83,28 +79,32 @@ void queue_delete(int id){
     }
     pthread_mutex_unlock(&clients_mutex);
 }
-/*
-void *waiting(void* i)
-{
-	pthread_detach(pthread_self());
-	printf("coffee is waiting\n");
-    sleep(i);
-    printf("%d\n",i);
-    printf("coffee is starting\n");
-    write(raspfd,next_coffee.type,sizeof(next_coffee));
 
+void *waiting(void* arg)
+{
+    Rasp *prasp = (Rasp *)arg;
+    printf("coffee is waiting coffee %d : %d\n",next_coffee.index, prasp->current_time);
+    sleep(prasp->current_time);
+    printf("%d\n",(int)prasp->current_time);
+    printf("coffee is starting\n");
+    write(prasp->raspfd,next_coffee.type,sizeof(next_coffee));
+    return NULL;
 }
-*/
+
 void SendRasp()
 {
-	//getpid(i)
-    if(current_time > next_coffee.hour)
+    Rasp *raspberry = (Rasp *)malloc(sizeof(Rasp));
+    
+    
+    
+    if(rasp.current_time > next_coffee.hour)
     {
-    	current_time = next_coffee.hour;
-    	//kill(pid, SIGUSR1);
+        pthread_cancel(pwaiting);
+        rasp.current_time = next_coffee.hour;
     }
-    //pthread_create(&pwaiting, NULL, &waiting, (void*)current_time);
-    write(raspfd,next_coffee.type,sizeof(next_coffee));
+    raspberry->raspfd = rasp.raspfd;
+    raspberry->current_time = rasp.current_time;
+    pthread_create(&pwaiting, NULL, &waiting, (void*)raspberry);
 }
 
 /* Do the GET to the API */
@@ -118,17 +118,26 @@ void Get_Api(void *arg)
 
 	get_json_file(get);
 
-    
+    char json_file[BUFFER_SZ];
+    memset(json_file, 0, BUFFER_SZ);
 
     for(size_t i = 0; i < 10; i++)
-    {
+    {/*
     	char act[BUFFER_SZ];
     	char h[BUFFER_SZ];
+
     	sprintf(h, "%d\n", get[i].heure);
     	sprintf(act, "%d\n", get[i].activate);
+
     	write(cli->connfd, strcat(get[i].type,"\n"), sizeof(char*));
     	write(cli->connfd, h, sizeof(char*));
     	write(cli->connfd, act, sizeof(char*));
+*/
+        char tmp[BUFFER_SZ];
+        memset(tmp, 0, BUFFER_SZ);
+
+        sprintf(tmp, "%s\n%d\n%d\n", get[i].type, get[i].heure, get[i].activate);
+        strcat(json_file, tmp);
 
         if(get[i].activate == 1)
         {
@@ -136,9 +145,9 @@ void Get_Api(void *arg)
         	int hour = get[i].heure;
         	int to_wait = coffee(hour / 100, hour % 100);
 
-        	if(to_wait < current_time)
+        	if(to_wait < rasp.current_time)
         	{
-        		current_time = to_wait;
+        		rasp.current_time = to_wait;
         		min = to_wait;
         		min_i = i;
 
@@ -150,6 +159,9 @@ void Get_Api(void *arg)
             
         }
     }
+
+    write(cli->connfd, json_file, BUFFER_SZ);
+    
     printf("get_api : %d\n", min_i);
     SendRasp();
     
@@ -217,11 +229,12 @@ int main(){
     struct sockaddr_in cli_addr;
     pthread_t tid;
     int value = 1;
+    rasp.current_time = 9999999;
 
     /* Socket settings */
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.1.29");
+    serv_addr.sin_addr.s_addr = inet_addr("10.0.2.15");
     serv_addr.sin_port = htons(8080);
 
     if(setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,&value,sizeof(int)) < 0)
@@ -265,7 +278,7 @@ int main(){
         
         if((cli_count) == 0)
         {
-            raspfd = connfd;
+            rasp.raspfd = connfd;
             sprintf(cli->name, "%s", "===Raspberry===");
             pthread_create(&tid, NULL, &handle_rasp, NULL);
         }
