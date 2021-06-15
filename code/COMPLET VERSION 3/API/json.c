@@ -35,7 +35,7 @@ void get_json_file(struct get_json get[10])
 
 
 
-void put_json_file(char *index, char* value, char* key)
+void put_json_file(char index, char* value, char* key)
 {
     json_t *json = json_load_file("../API/test.json", 0, NULL);
 /*
@@ -48,7 +48,9 @@ void put_json_file(char *index, char* value, char* key)
         pos += 1;
     }
 */
-    int pos = atoi(index);
+    int pos = index - '0';
+
+    printf("pos = %d\n", pos);
 
     if(strcmp(value, "type") == 0)
     {
@@ -63,6 +65,7 @@ void put_json_file(char *index, char* value, char* key)
 
     json_dump_file(json, "../API/test.json", JSON_INDENT(4));
 }
+
 
 char next_index()
 {

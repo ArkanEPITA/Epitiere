@@ -87,6 +87,11 @@ void *waiting(void* arg)
     Rasp *prasp = (Rasp *)arg;
     printf("coffee is waiting coffee %d : %d\n",next_coffee.index, prasp->current_time);
     sleep(prasp->current_time);
+
+    char index = next_coffee.index + '0';
+
+    put_json_file(index, "activate", "0");
+
     printf("%d\n",(int)prasp->current_time);
     printf("coffee is starting\n");
     write(prasp->raspfd,next_coffee.type,sizeof(next_coffee));
