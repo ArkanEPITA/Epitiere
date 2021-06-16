@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <err.h>
 #include <string.h>
 #include <pthread.h>
 #include <sys/types.h>
@@ -60,6 +61,21 @@ pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 pthread_mutex_t api_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+//Used to capture the program close request signal
+void sigint_handler(int sig) {
+    static int countdown = 2;
+    countdown--;
+    if (countdown > 0 )
+    {
+        write(STDOUT_FILENO,"\n",1);
+        warnx("Please insist %d more time(s)", countdown);
+    }
+    else {
+        write(STDOUT_FILENO,"\n",1);
+        warnx("Ok, server closed");
+        _exit(sig);
+    }
+}
 
 void get_ip()
 {
@@ -302,7 +318,7 @@ int main(){
     serv_addr.sin_family = AF_INET;
 
     get_ip();
-
+    signal(SIGINT, sigint_handler);
     printf("IP server: %s\n", HOSTNAME);
 
     serv_addr.sin_addr.s_addr = inet_addr(HOSTNAME);
