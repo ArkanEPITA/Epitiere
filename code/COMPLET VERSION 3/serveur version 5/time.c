@@ -8,13 +8,13 @@
 
 int coffee(int Hours, int Mins)
 {
-	// lire l'heure courante
+	// read the current time
    	time_t now = time (NULL);
 
-   	// la convertir en heure locale
+   	// convert it to local time
 	struct tm tm_now = *localtime (&now);
 
-	// Creer une chaine HHMM
+	// Create an HHMM chain
 	char s_now[sizeof"HHMM"];
 
 	strftime (s_now, sizeof s_now, "%H%M", &tm_now);
@@ -54,11 +54,6 @@ int coffee(int Hours, int Mins)
 	}
 	
 	int secondes = m*60;
-	//printf("%d\n", secondes);
-	//sleep(secondes);
-
-	//insert starting coffe function
-	
-	//printf("your coffee start now\n");
+	// Returns the difference of the two times in seconds
 	return secondes;
 }

@@ -6,14 +6,6 @@
 #include "json.h"
 
 
-/*struct get_json{
-    char* type;
-    int heure;
-    int activate;
-};
-*/
-//struct get_json get[10];
-
 void get_json_file(struct get_json get[10])
 {
     json_t *json = json_load_file("../API/test.json", 0, NULL);
@@ -37,23 +29,11 @@ void get_json_file(struct get_json get[10])
 void put_json_file(char index, char* value, char* key)
 {
 
-    //printf("load\n");
+    
     json_t *json = json_load_file("../API/test.json", 0, NULL);
-/*
-    size_t max = json_array_size(json); //BE CAREFUL TO BE SURE THAT "json" IS AN ARRAY
-    size_t pos = 0;
 
-    while(pos < max)
-    {
-        json_object_set(json_array_get(json, pos), "type", json_string("long"));
-        pos += 1;
-    }
-*/
     int pos = index - '0';
 
-    printf("pos = %d\n", pos);
-
-    //printf("strcmp\n");
     if(strcmp(value, "type") == 0)
     {
         json_object_set(json_array_get(json, pos), value, json_string(key));
@@ -99,46 +79,3 @@ char next_index()
 
     return res;
 }
-/*
-int main(int argc, char* argv[])
-{
-    struct get_json get[10];
-
-    if(argc < 2)
-    {
-        errx(EXIT_FAILURE, "Need at least 1 argument");
-    }
-
-    printf("%s\n", argv[1]);
-
-    if(strcmp(argv[1], "get") == 0)
-    {
-
-        get_json_file(get);
-
-        printf("[\n");
-        for (size_t pos = 0; pos < 10; pos++)
-        {
-            char* type = get[pos].type;
-            int heure = get[pos].heure;
-            int activate = get[pos].activate;
-
-            printf("{\n\ttype: %s\n\theure: %d\n\tactivate: %d\n}\n", type, heure, activate);
-        }
-        printf("]\n");
-    }
-    else if(strcmp(argv[1], "put") == 0)
-    {
-        if(argc != 5)
-        {
-            errx(EXIT_FAILURE, "Need 3 other argument with \"put\" : index, value, key");
-        }
-        else
-        {
-            put_json_file(argv[2], argv[3], argv[4]);
-        }
-    }
-
-
-    return EXIT_SUCCESS;
-}*/

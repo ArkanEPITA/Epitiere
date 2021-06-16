@@ -15,11 +15,11 @@
 void func(int sockfd)
 {
     char buff[MAX];
-
+    ssize_t r = 0;
     while(1)
     {
-        memset(buff,0,80);
-        ssize_t r = 0;
+        memset(buff,0,sizeof(buff));
+        
         r = read(sockfd, buff, sizeof(buff));
         if(r != 0)
         {   
