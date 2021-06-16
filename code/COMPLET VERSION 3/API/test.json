@@ -1,8 +1,8 @@
 [
     {
         "activate": 1,
-        "type": "court",
-        "heure": 2100
+        "type": "long",
+        "heure": 437
     },
     {
         "activate": 1,
@@ -10,9 +10,9 @@
         "heure": 1800
     },
     {
-        "activate": 0,
-        "type": "long",
-        "heure": 1200
+        "activate": 1,
+        "type": "court",
+        "heure": 2300
     },
     {
         "activate": 0,
@@ -30,7 +30,7 @@
         "heure": 1400
     },
     {
-        "activate": 1,
+        "activate": 0,
         "type": "long",
         "heure": 1100
     },
@@ -45,7 +45,7 @@
         "heure": 1834
     },
     {
-        "activate": 1,
+        "activate": 0,
         "type": "court",
         "heure": 1900
     }

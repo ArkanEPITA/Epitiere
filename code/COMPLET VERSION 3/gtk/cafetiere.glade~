@@ -18,6 +18,7 @@
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
+    <property name="icon">../../../Data/logo.png</property>
     <signal name="destroy" handler="on_main_window_destroy" swapped="no"/>
     <child type="titlebar">
       <placeholder/>

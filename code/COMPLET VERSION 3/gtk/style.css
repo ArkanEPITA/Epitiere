@@ -26,11 +26,15 @@
     color: white;
 }
 
+#coffeeChooser{
+    margin-right: 10px;
+}
 
-#coffeeChooser.coffee1{
-    color: green;
+
+.enable{
+    color: rgb(92, 170, 243);
 }
 
 .disable{
-    color: red;
+    color: rgb(51, 30, 3);
 }

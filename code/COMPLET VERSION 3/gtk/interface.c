@@ -16,6 +16,24 @@ struct GetVal Value;
 
 int sockfd;
 char list[30][6];
+GtkLabel* enabledCoffees[10];
+
+
+
+/*
+struct labelList{
+  GtkLabel *coffee1;
+  GtkLabel *coffee2;
+  GtkLabel *coffee3;
+  GtkLabel *coffee4;
+  GtkLabel *coffee5;
+  GtkLabel *coffee6;
+  GtkLabel *coffee7;
+  GtkLabel *coffee8;
+  GtkLabel *coffee9;
+  GtkLabel *coffee10;
+};
+*/
 
 
 void create_window(int argc, char* argv[], char* json_file)
@@ -45,7 +63,20 @@ void create_window(int argc, char* argv[], char* json_file)
   GtkToggleButton *disableButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "radiobuttonDisabled"));
   GtkComboBox *coffeeEntry = GTK_COMBO_BOX(gtk_builder_get_object(data.builder, "coffeeChooser"));
   //GtkEntry *entry = GTK_ENTRY(gtk_builder_get_object(data.builder, "entry"));
+  GtkLabel *coffee1 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee1"));
+  GtkLabel *coffee2 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee2"));
+  GtkLabel *coffee3 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee3"));
+  GtkLabel *coffee4 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee4"));
+  GtkLabel *coffee5 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee5"));
+  GtkLabel *coffee6 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee6"));
+  GtkLabel *coffee7 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee7"));
+  GtkLabel *coffee8 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee8"));
+  GtkLabel *coffee9 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee9"));
+  GtkLabel *coffee10 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee10"));
   
+
+
+
 /*
   GtkEntry *coffee1 = gtk_combo_box_get_active(coffeeEntry);
   printf("entry1 = %s\n", gtk_entry_get_text(coffee1));
@@ -58,6 +89,28 @@ void create_window(int argc, char* argv[], char* json_file)
   Value.disableButton = disableButton;
   Value.comboboxCoffee = coffeeEntry;
 
+/*
+  enabledCoffees.coffee1 = coffee1;
+  enabledCoffees.coffee2 = coffee2;
+  enabledCoffees.coffee3 = coffee3;
+  enabledCoffees.coffee4 = coffee4;
+  enabledCoffees.coffee5 = coffee5;
+  enabledCoffees.coffee6 = coffee6;
+  enabledCoffees.coffee7 = coffee7;
+  enabledCoffees.coffee8 = coffee8;
+  enabledCoffees.coffee9 = coffee9;
+  enabledCoffees.coffee10 = coffee10;
+*/
+  enabledCoffees[0] = coffee1;
+  enabledCoffees[1] = coffee2;
+  enabledCoffees[2] = coffee3;
+  enabledCoffees[3] = coffee4;
+  enabledCoffees[4] = coffee5;
+  enabledCoffees[5] = coffee6;
+  enabledCoffees[6] = coffee7;
+  enabledCoffees[7] = coffee8;
+  enabledCoffees[8] = coffee9;
+  enabledCoffees[9] = coffee10;
 
   //link w/ css file
   GtkCssProvider *cssProvider = gtk_css_provider_new();
@@ -119,11 +172,22 @@ void create_window(int argc, char* argv[], char* json_file)
   //printf("\ntime = %s\ntype = %s\nactivate = %s\n", time, type, activate);
   //printf("list[0] = %s\n", list[0]);
 
-  char* h = calloc(2, sizeof(char));
-  strncpy(h, time, 2);
 
+  char* h = calloc(2, sizeof(char));
   char* min = calloc(2, sizeof(char));
-  strncpy(min, time+2, 2);
+
+  if(atoi(time) < 1000)
+  {
+    strncpy(h, time, 1);
+    strncpy(min, time+1, 2);
+  }
+  else
+  {
+    strncpy(h, time, 2);
+    strncpy(min, time+2, 2);
+  }
+
+
 
 
   //printf("%s:%s\n", h, min);
@@ -163,6 +227,24 @@ void create_window(int argc, char* argv[], char* json_file)
   {
     gtk_toggle_button_set_active(enableButton, TRUE);
   }
+
+
+GtkStyleContext *context;
+
+for(int i = 0; i < 10; i++)
+{
+  context = gtk_widget_get_style_context(GTK_WIDGET(enabledCoffees[i]));
+
+  if(atoi(list[i*3 + 2]) == 0)
+  {
+    gtk_style_context_add_class(context,"disable");
+  }
+  else
+  {
+    gtk_style_context_add_class(context,"enable");
+  }
+}
+
 
 
 
@@ -210,14 +292,20 @@ void on_validation_clicked()
   int active;
   char* type;
 
+  GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(enabledCoffees[atoi(id)]));
+
   gboolean act = gtk_toggle_button_get_active(Value.enableButton);
   if(act)
   {
     active = 1;
+    gtk_style_context_remove_class(context,"disable");
+    gtk_style_context_add_class(context,"enable");
   }
   else
   {
     active = 0;
+    gtk_style_context_remove_class(context, "enable");
+    gtk_style_context_add_class(context, "disable");
   }
 
   gboolean typ = gtk_toggle_button_get_active(Value.shortButton);
@@ -232,18 +320,46 @@ void on_validation_clicked()
 
   char* res = calloc(15, sizeof(char));
 
-/*
+  for(int i = 0; i < 5; i++)
+  {
+    list[atoi(id)*3][i] = type[i];
+  }
+
+  char time[5];
+  sprintf(&time[0], "%d%02d", hours, minutes);
+
+  for(int i = 0; i < 4; i++)
+  {
+    list[atoi(id)*3 + 1][i] = time[i];
+  }
+
+  char acti = active + '0';
+
+  list[atoi(id)*3 + 2][0] = acti;
+
+
+
+
+
+
   printf("id = %s\n", id);
   printf("active = %d\n", active);
   printf("type = %s\n", type);
   printf("time = %d", hours);
   printf("%d\n\n", minutes);
-*/
+
 
 
   sprintf(res, "%s\n%d\n%s\n%d%02d\n", id, active, type, hours, minutes);
   
   write(sockfd, res, strlen(res));
+
+
+
+
+
+
+
 }
 
 
@@ -272,12 +388,18 @@ void on_coffeeChooserEntry_changed()
   //printf("list[0] = %s\n", list[0]);
 
   char* h = calloc(2, sizeof(char));
-  strncpy(h, time, 2);
-
   char* min = calloc(2, sizeof(char));
-  strncpy(min, time+2, 2);
 
-
+  if(atoi(time) < 1000)
+  {
+    strncpy(h, time, 1);
+    strncpy(min, time+1, 2);
+  }
+  else
+  {
+    strncpy(h, time, 2);
+    strncpy(min, time+2, 2);
+  }
 
 
   //Set the value of the spinbuttonHours to hours
@@ -287,6 +409,8 @@ void on_coffeeChooserEntry_changed()
   //Set the value of the spinbutton2 to minutes
   int minutes = atoi(min);
   gtk_spin_button_set_value(Value.minutes, minutes);
+
+
 
 
   int ret1 = strncmp(type, "long", 4);
