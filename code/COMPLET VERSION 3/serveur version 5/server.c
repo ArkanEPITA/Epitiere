@@ -161,8 +161,6 @@ void Get_Api(void *arg)
 {
     client_t *cli = (client_t *)arg;
     
-
-    int min_i = -1;
     int min = 999999;
 
     get_json_file(get);
@@ -187,7 +185,6 @@ void Get_Api(void *arg)
             {
                 
                 min = to_wait;
-                min_i = i;
 
                 next_coffee.index = i;
                 next_coffee.type = get[i].type;
@@ -264,7 +261,6 @@ void *handle_client(void *arg)
             {
                 if(buff[c] == '\n')
                 {
-                    printf("%d\n", posCoffee);
                     posc = 0;
                     posCoffee++;
                 }
