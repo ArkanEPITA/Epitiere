@@ -97,6 +97,7 @@ void create_window(int argc, char* argv[], char* json_file)
     c++;
   }
 
+
   
 /*
 
@@ -240,7 +241,7 @@ void on_validation_clicked()
 */
 
 
-  sprintf(res, "%s\n%d\n%s\n%d%02d", id, active, type, hours, minutes);
+  sprintf(res, "%s\n%d\n%s\n%d%02d\n", id, active, type, hours, minutes);
   
   write(sockfd, res, strlen(res));
 }

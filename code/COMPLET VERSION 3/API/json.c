@@ -16,7 +16,6 @@
 
 void get_json_file(struct get_json get[10])
 {
-
     json_t *json = json_load_file("../API/test.json", 0, NULL);
 
     for (size_t pos = 0; pos < 10; pos++)
@@ -37,6 +36,8 @@ void get_json_file(struct get_json get[10])
 
 void put_json_file(char index, char* value, char* key)
 {
+
+    //printf("load\n");
     json_t *json = json_load_file("../API/test.json", 0, NULL);
 /*
     size_t max = json_array_size(json); //BE CAREFUL TO BE SURE THAT "json" IS AN ARRAY
@@ -52,6 +53,7 @@ void put_json_file(char index, char* value, char* key)
 
     printf("pos = %d\n", pos);
 
+    //printf("strcmp\n");
     if(strcmp(value, "type") == 0)
     {
         json_object_set(json_array_get(json, pos), value, json_string(key));

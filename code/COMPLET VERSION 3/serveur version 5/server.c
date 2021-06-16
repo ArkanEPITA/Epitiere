@@ -234,8 +234,69 @@ void *handle_client(void *arg)
             Get_Api(cli);
             pthread_mutex_unlock(&api_mutex);
         }
-        memset(buff,0,sizeof(buff));
         sleep(1);
+
+        if (strcmp(buff, "1") != 0)
+        {
+            char list[4][6];
+            for (int i = 0; i < 4; ++i)
+            {
+                memset(list[i], 0, 6);
+            }
+
+            int posCoffee = 0;
+            int c = 0;
+            int posc = 0;
+
+            /*char tmp[5];
+            memset(tmp, 0, 5);*/
+
+            while(posCoffee < 4)
+            {
+                if(buff[c] == '\n')
+                {
+                    printf("%d\n", posCoffee);
+                    posc = 0;
+                    posCoffee++;
+                }
+                else
+                {
+                    //printf("%d\n", posc);
+                    list[posCoffee][posc] = buff[c];
+                    posc++;
+                }
+                c++;
+            }
+
+            //printf("before\n\n\n\n");
+            //printf("%c\n", list[0][0]);
+            /*if(atoi(list[3]) < 1000 && list[3][0] != '0')
+            {
+                int i = 1;
+                char tmp = list[3][0];
+                char tmp2;
+                list[3][0] = '0';
+                while(i < 4)
+                {
+                    tmp2 = list[3][i];
+                    list[3][i] = tmp;
+                    tmp = tmp2;
+                    i += 1;
+                }
+                printf("%s\n", list[3]);
+            }*/
+
+            char index = list[0][0];
+
+            //printf("1\n");
+            put_json_file(index, "activate", list[1]);
+            //rintf("2\n");
+            put_json_file(index, "type", list[2]);
+            //printf("3\n");
+            put_json_file(index, "heure", list[3]);
+            //printf("fin put\n");
+        }
+        memset(buff,0,sizeof(buff));
     }
 
     /* Delete client from queue and yield thread */

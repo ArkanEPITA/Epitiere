@@ -1,13 +1,13 @@
 [
     {
-        "activate": 0,
-        "type": "long",
-        "heure": 1000
+        "activate": 1,
+        "type": "court",
+        "heure": 2100
     },
     {
         "activate": 1,
         "type": "long",
-        "heure": 1100
+        "heure": 1800
     },
     {
         "activate": 0,
@@ -15,7 +15,7 @@
         "heure": 1200
     },
     {
-        "activate": 1,
+        "activate": 0,
         "type": "long",
         "heure": 1300
     },
@@ -26,8 +26,8 @@
     },
     {
         "activate": 0,
-        "type": "long",
-        "heure": 1500
+        "type": "court",
+        "heure": 1400
     },
     {
         "activate": 1,
