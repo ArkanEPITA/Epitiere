@@ -241,7 +241,6 @@ void on_validation_clicked()
 
 
   sprintf(res, "%s\n%d\n%s\n%d%02d", id, active, type, hours, minutes);
-  printf("res:\n%s\n", res);
   
   write(sockfd, res, strlen(res));
 }
