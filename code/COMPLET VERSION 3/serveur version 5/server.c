@@ -68,7 +68,7 @@ void sigint_handler(int sig) {
     if (countdown > 0 )
     {
         write(STDOUT_FILENO,"\n",1);
-        warnx("Please insist %d more time(s)", countdown);
+        warnx("Please insist %d more time", countdown);
     }
     else {
         write(STDOUT_FILENO,"\n",1);
