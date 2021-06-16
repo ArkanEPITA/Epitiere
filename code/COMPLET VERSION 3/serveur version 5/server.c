@@ -42,7 +42,7 @@ typedef struct {
     char name[32];           /* Client name */
 } client_t;
 
-
+/* Coffee structure */
 typedef struct{
 	int hour;
 	int index;
@@ -77,6 +77,7 @@ void sigint_handler(int sig) {
     }
 }
 
+// Retrieves the IP of the machine where the server is started
 void get_ip()
 {
 	struct ifaddrs *addr, *intf;
@@ -88,9 +89,9 @@ void get_ip()
     }
     for (addr = intf; addr != NULL; addr = addr->ifa_next) {
         family = addr->ifa_addr->sa_family;
-    //AF_INET est la famille d'adresses pour IPv4
+    // AF_INET is the address family for IPv4
         if (family == AF_INET) {
-          //getnameinfo permet la résolution de noms.
+          //getnameinfo allows name resolution.
           getnameinfo(addr->ifa_addr, 
                           sizeof(struct sockaddr_in),
                           HOSTNAME, 
@@ -128,26 +129,14 @@ void queue_delete(int id){
     pthread_mutex_unlock(&clients_mutex);
 }
 
-void *waiting(void* arg)
-{
-    Rasp *prasp = (Rasp *)arg;
-    printf("coffee is waiting coffee %d : %d\n",next_coffee.index, prasp->current_time);
-    sleep(prasp->current_time);
+/*  */
+void *waiting(void* arg);
 
-    char index = next_coffee.index + '0';
-
-    put_json_file(index, "activate", "0");
-
-    printf("coffee is starting\n");
-    write(prasp->raspfd,next_coffee.type,sizeof(next_coffee));
-    return NULL;
-}
 
 void SendRasp()
 {
     Rasp *raspberry = (Rasp *)malloc(sizeof(Rasp));
-    
-
+    printf("id = %d\n",next_coffee.index);
     pthread_cancel(pwaiting);
     rasp.current_time = next_coffee.hour;
     rasp.index = next_coffee.index;
@@ -155,26 +144,11 @@ void SendRasp()
     raspberry->current_time = rasp.current_time;
     pthread_create(&pwaiting, NULL, &waiting, (void*)raspberry);
 }
-
-/* Do the GET to the API */
-void Get_Api(void *arg)
+void get_min()
 {
-    client_t *cli = (client_t *)arg;
-    
     int min = 999999;
-
-    get_json_file(get);
-
-    char json_file[BUFFER_SZ];
-    memset(json_file, 0, BUFFER_SZ);
-    for(size_t i = 0; i < 10; i++)
+    for (int i = 0; i < 10; ++i)
     {
-        char tmp[BUFFER_SZ];
-        memset(tmp, 0, BUFFER_SZ);
-
-        sprintf(tmp, "%s\n%d\n%d\n", get[i].type, get[i].heure, get[i].activate);
-        strcat(json_file, tmp);
-        
         if(get[i].activate == 1)
         {
             //write(cli->connfd,get,sizeof(get));
@@ -195,10 +169,50 @@ void Get_Api(void *arg)
             
         }
     }
+}
+/* Do the GET to the API */
+void Get_Api(void *arg)
+{
+    client_t *cli = (client_t *)arg;
+    
+    
+
+    get_json_file(get);
+
+    char json_file[BUFFER_SZ];
+    memset(json_file, 0, BUFFER_SZ);
+    for(size_t i = 0; i < 10; i++)
+    {
+        char tmp[BUFFER_SZ];
+        memset(tmp, 0, BUFFER_SZ);
+
+        sprintf(tmp, "%s\n%d\n%d\n", get[i].type, get[i].heure, get[i].activate);
+        strcat(json_file, tmp);
+        get_min();
+        
+    }
     
     write(cli->connfd, json_file, BUFFER_SZ);
     SendRasp();
     
+}
+
+void *waiting(void* arg)
+{
+    Rasp *prasp = (Rasp *)arg;
+    printf("coffee is waiting coffee %d : %d\n",next_coffee.index, prasp->current_time);
+    sleep(prasp->current_time);
+
+    char index = next_coffee.index + '0';
+
+    put_json_file(index, "activate", "0");
+
+    printf("coffee is starting\n");
+    write(prasp->raspfd,next_coffee.type,sizeof(next_coffee));
+    sleep(3);
+    get_min();
+    SendRasp();
+    return NULL;
 }
 
 /* Print ip address */
