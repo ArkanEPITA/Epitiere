@@ -72,7 +72,7 @@ void sigint_handler(int sig) {
     }
     else {
         write(STDOUT_FILENO,"\n",1);
-        warnx("Ok, server closed");
+        warnx("Ok, server is closed");
         _exit(sig);
     }
 }
