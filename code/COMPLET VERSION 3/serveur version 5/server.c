@@ -13,7 +13,6 @@
 #include "../API/json.h"
 #include "time.h"
 #include <jansson.h>
-
 #include <netdb.h>
 #include <ifaddrs.h>
 
@@ -129,10 +128,10 @@ void queue_delete(int id){
     pthread_mutex_unlock(&clients_mutex);
 }
 
-/*  */
+/* Waiting function for the desired time for coffee and sending the information to the Raspberry*/
 void *waiting(void* arg);
 
-
+/* Function of the management of the waiting thread */
 void SendRasp()
 {
     Rasp *raspberry = (Rasp *)malloc(sizeof(Rasp));
@@ -144,6 +143,8 @@ void SendRasp()
     raspberry->current_time = rasp.current_time;
     pthread_create(&pwaiting, NULL, &waiting, (void*)raspberry);
 }
+
+/* Function allowing you to retrieve the information of the next coffee to be launched */
 void get_min()
 {
     int min = 999999;
@@ -151,32 +152,26 @@ void get_min()
     {
         if(get[i].activate == 1)
         {
-            //write(cli->connfd,get,sizeof(get));
             int hour = get[i].heure;
             int to_wait = coffee(hour / 100, hour % 100);
-
             if(to_wait < min)
-            {
-                
+            {             
                 min = to_wait;
-
                 next_coffee.index = i;
                 next_coffee.type = get[i].type;
                 next_coffee.hour = min;
-
-
             }
             
         }
     }
 }
-/* Do the GET to the API */
+
+/* Do the GET to the API and send the resulting list to the client interface */
 void Get_Api(void *arg)
 {
     client_t *cli = (client_t *)arg;
     
-    
-
+    //Do the GET to the API
     get_json_file(get);
 
     char json_file[BUFFER_SZ];
@@ -191,7 +186,7 @@ void Get_Api(void *arg)
         get_min();
         
     }
-    
+    //send the resulting list to the client interface
     write(cli->connfd, json_file, BUFFER_SZ);
     SendRasp();
     
@@ -207,17 +202,19 @@ void *waiting(void* arg)
 
     put_json_file(index, "activate", "0");
 
-    printf("coffee is starting\n");
+    printf("coffee %d is starting\n",next_coffee.index);
     write(prasp->raspfd,next_coffee.type,sizeof(next_coffee));
-    sleep(30);
 
+    //check if there is a second cafe at this time
+    sleep(30);
     get_json_file(get);
     get_min();
     SendRasp();
+
     return NULL;
 }
 
-/* Print ip address */
+/* Print ip address of the client */
 void print_client_addr(struct sockaddr_in addr){
     printf("%d.%d.%d.%d",
         addr.sin_addr.s_addr & 0xff,
@@ -259,7 +256,6 @@ void *handle_client(void *arg)
             Get_Api(cli);
             pthread_mutex_unlock(&api_mutex);
         }
-        sleep(1);
 
         if (strcmp(buff, "1") != 0)
         {
@@ -297,6 +293,7 @@ void *handle_client(void *arg)
             Get_Api(cli);
         }
         memset(buff,0,sizeof(buff));
+        sleep(1);
     }
 
     /* Delete client from queue and yield thread */
@@ -308,9 +305,11 @@ void *handle_client(void *arg)
     /* Close connection */
     close(cli->connfd);
     free(cli);
+
     return NULL;
 }
 
+/* Function of the connection of the RaspberryPi to the server */
 void *handle_rasp()
 {
     cli_count++;
@@ -318,6 +317,7 @@ void *handle_rasp()
     return NULL;
 }
 
+/* main */
 int main(){
     int listenfd = 0, connfd = 0;
     struct sockaddr_in serv_addr;
@@ -379,6 +379,7 @@ int main(){
         
         if((cli_count) == 0)
         {
+            /* Save the Raspberry socket and create his thread */
             rasp.raspfd = connfd;
             sprintf(cli->name, "%s", "===Raspberry===");
             pthread_create(&tid, NULL, &handle_rasp, NULL);
@@ -390,10 +391,9 @@ int main(){
             queue_add(cli);
             pthread_create(&tid, NULL, &handle_client, (void*)cli);
         }
-        
+
         /* Reduce CPU usage */
-        sleep(1);
-        
+        sleep(1); 
     }
 
     return EXIT_SUCCESS;
