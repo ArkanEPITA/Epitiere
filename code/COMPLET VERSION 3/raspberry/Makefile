@@ -12,3 +12,4 @@ $(foreach f, $(EXE), $(eval $(f):))
 
 clean:
 	${RM} $(EXE)
+	clear

@@ -1,13 +1,13 @@
 [
     {
         "activate": 0,
-        "type": "long",
-        "heure": 2202
+        "type": "court",
+        "heure": 2255
     },
     {
-        "activate": 1,
-        "type": "long",
-        "heure": 1800
+        "activate": 0,
+        "type": "court",
+        "heure": 2240
     },
     {
         "activate": 1,

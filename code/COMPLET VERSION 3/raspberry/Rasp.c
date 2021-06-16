@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX 80
+#define MAX 5
 #define PORT 8080
 #define SA struct sockaddr
 
@@ -18,13 +18,12 @@ void func(int sockfd)
     ssize_t r = 0;
     while(1)
     {
-        memset(buff,0,sizeof(buff));
+        memset(buff, 0, 5);
         
-        r = read(sockfd, buff, sizeof(buff));
-        if(r != 0)
+        r = read(sockfd, buff, 5);
+        if(strcmp(buff, "court") == 0 || strcmp(buff, "long") == 0)
         {   
-            write(STDOUT_FILENO, buff, sizeof(buff));
-            printf("\n");
+            printf("%s\n", buff);            
         }
     }
 }

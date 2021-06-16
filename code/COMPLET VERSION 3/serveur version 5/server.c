@@ -209,7 +209,9 @@ void *waiting(void* arg)
 
     printf("coffee is starting\n");
     write(prasp->raspfd,next_coffee.type,sizeof(next_coffee));
-    sleep(3);
+    sleep(30);
+
+    get_json_file(get);
     get_min();
     SendRasp();
     return NULL;
@@ -291,6 +293,8 @@ void *handle_client(void *arg)
             put_json_file(index, "activate", list[1]);
             put_json_file(index, "type", list[2]);
             put_json_file(index, "heure", list[3]);
+
+            Get_Api(cli);
         }
         memset(buff,0,sizeof(buff));
     }
@@ -323,13 +327,13 @@ int main(){
     rasp.current_time = 9999999;
     rasp.index = 0;
 
-    /* Socket settings */
-    listenfd = socket(AF_INET, SOCK_STREAM, 0);
-    serv_addr.sin_family = AF_INET;
-
     get_ip();
     signal(SIGINT, sigint_handler);
     printf("IP server: %s\n", HOSTNAME);
+
+    /* Socket settings */
+    listenfd = socket(AF_INET, SOCK_STREAM, 0);
+    serv_addr.sin_family = AF_INET;
 
     serv_addr.sin_addr.s_addr = inet_addr(HOSTNAME);
     serv_addr.sin_port = htons(8080);
