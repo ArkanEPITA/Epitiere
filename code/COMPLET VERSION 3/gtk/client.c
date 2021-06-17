@@ -12,7 +12,9 @@
 #define PORT 8080
 #define SA struct sockaddr
 
-char* func(int sockfd)
+
+//Get what the server sent to the client
+char* get_buffer(int sockfd)
 {
   write(sockfd, "1", 1);
   char buff[MAXI];
@@ -39,6 +41,10 @@ char* func(int sockfd)
   return res;
 }
 
+
+//Take care of the connection with the server
+//And send the scket and the message written by the server to
+//Interface.c
 Client client()
 {
   char buff[NI_MAXHOST];
@@ -74,13 +80,7 @@ Client client()
   else
     printf("connected to the server..\n");
 
-  //write(sockfd,"1",1);
-  // function for chat
-
-  char* json_file = func(sockfd);
-
-
-  //printf("json file : %s\n", json_file);
+  char* json_file = get_buffer(sockfd);
 
   Client cli = { sockfd, json_file };
 
