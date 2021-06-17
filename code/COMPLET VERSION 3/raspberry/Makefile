@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = `pkg-config --cflags glib-2.0` -Wall -Wextra -pthread
+CFLAGS = `pkg-config --cflags glib-2.0` -Wall -Wextra -pthread -lwiringPi
 LDLIBS = `pkg-config --libs glib-2.0` 
 
 EXE = server client Rasp Api

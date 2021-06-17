@@ -7,10 +7,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wiringPi.h>
 
-#define MAX 5
+#define MAX 80
 #define PORT 8080
 #define SA struct sockaddr
+
+void led(char* buff)
+{
+  
+  int pin = 7;
+  int time = 15;
+  if(wiringPiSetup()==-1)
+	{
+		exit(0);
+	}
+	pinMode(pin,OUTPUT);
+  
+  if(strcmp(buff,"court")==0)
+  {
+    while(time >=0)
+    {
+      digitalWrite(pin,1);
+      delay(500);
+      digitalWrite(pin,0);
+      delay(500);
+      time--;
+    }
+  }
+  else{
+      digitalWrite(pin,1);
+      sleep(10);
+    }
+    digitalWrite(pin,0);
+	
+}
 
 void func(int sockfd)
 {
@@ -18,13 +49,16 @@ void func(int sockfd)
     ssize_t r = 0;
     while(1)
     {
-        memset(buff, 0, 5);
+        memset(buff,0,5);
+        
         
         r = read(sockfd, buff, 5);
-        if(strcmp(buff, "court") == 0 || strcmp(buff, "long") == 0)
-        {   
-            printf("%s\n", buff);            
+        
+        if(strcmp(buff, "court") == 0 || strcmp(buff, "long") == 0){
+            printf("%s\n", buff);
+            led(buff);
         }
+       
     }
 }
 
