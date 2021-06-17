@@ -13,7 +13,7 @@
 #define PORT 8080
 #define SA struct sockaddr
 
-void led(char* buff)
+/*void led(char* buff)
 {
   
   int pin = 7;
@@ -41,7 +41,7 @@ void led(char* buff)
     }
     digitalWrite(pin,0);
 	
-}
+}*/
 
 void func(int sockfd)
 {
@@ -56,7 +56,7 @@ void func(int sockfd)
         
         if(strcmp(buff, "court") == 0 || strcmp(buff, "long") == 0){
             printf("%s\n", buff);
-            led(buff);
+            //led(buff);
         }
        
     }
