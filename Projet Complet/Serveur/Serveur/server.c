@@ -16,7 +16,7 @@
 #include <netdb.h>
 #include <ifaddrs.h>
 
-#define MAX_CLIENTS 100
+#define MAX_CLIENTS 10
 #define BUFFER_SZ 2048
 
 static _Atomic unsigned int cli_count = 0;
@@ -318,7 +318,10 @@ void *handle_rasp()
 }
 
 /* main */
-int main(){
+int main()
+{
+    signal(SIGINT, sigint_handler);
+
     int listenfd = 0, connfd = 0;
     struct sockaddr_in serv_addr;
     struct sockaddr_in cli_addr;
@@ -328,8 +331,9 @@ int main(){
     rasp.index = 0;
 
     get_ip();
-    signal(SIGINT, sigint_handler);
     printf("IP server: %s\n", HOSTNAME);
+
+
 
     /* Socket settings */
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
