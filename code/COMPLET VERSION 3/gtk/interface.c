@@ -1,7 +1,7 @@
 #include "interface.h"
 
 
-
+//To acceed those button in the functions below
 struct GetVal{
   GtkSpinButton *hours;
   GtkSpinButton *minutes;
@@ -11,35 +11,23 @@ struct GetVal{
   GtkToggleButton *disableButton;
   GtkComboBox *comboboxCoffee;
   };
-
 struct GetVal Value;
 
+//To acced the socket and close it in the "window_destroy" function
 int sockfd;
+
+//List of the coffees and their information
 char list[30][6];
+
+//List of the labels on the left of the window
 GtkLabel* enabledCoffees[10];
 
 
 
-/*
-struct labelList{
-  GtkLabel *coffee1;
-  GtkLabel *coffee2;
-  GtkLabel *coffee3;
-  GtkLabel *coffee4;
-  GtkLabel *coffee5;
-  GtkLabel *coffee6;
-  GtkLabel *coffee7;
-  GtkLabel *coffee8;
-  GtkLabel *coffee9;
-  GtkLabel *coffee10;
-};
-*/
 
 
 void create_window(int argc, char* argv[], char* json_file)
 {
-
-  //printf("json file : %s\n", json_file);
   //Init variables
   GtkWidget *main_window;
   Data data;
@@ -53,7 +41,7 @@ void create_window(int argc, char* argv[], char* json_file)
   data.builder = gtk_builder_new();
   gtk_builder_add_from_file(data.builder, "cafetiere.glade", NULL);
 
-	//Get the objects
+	//Get all the objects we need
 	main_window =  GTK_WIDGET(gtk_builder_get_object(data.builder, "main_window"));
   GtkSpinButton *spinbuttonHours = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbuttonHours"));
   GtkSpinButton *spinbuttonMinutes = GTK_SPIN_BUTTON(gtk_builder_get_object(data.builder, "spinbuttonMinutes"));
@@ -62,7 +50,7 @@ void create_window(int argc, char* argv[], char* json_file)
   GtkToggleButton *enableButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "radiobuttonEnabled"));
   GtkToggleButton *disableButton = GTK_TOGGLE_BUTTON(gtk_builder_get_object(data.builder, "radiobuttonDisabled"));
   GtkComboBox *coffeeEntry = GTK_COMBO_BOX(gtk_builder_get_object(data.builder, "coffeeChooser"));
-  //GtkEntry *entry = GTK_ENTRY(gtk_builder_get_object(data.builder, "entry"));
+
   GtkLabel *coffee1 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee1"));
   GtkLabel *coffee2 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee2"));
   GtkLabel *coffee3 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee3"));
@@ -75,12 +63,6 @@ void create_window(int argc, char* argv[], char* json_file)
   GtkLabel *coffee10 = GTK_LABEL(gtk_builder_get_object(data.builder, "coffee10"));
   
 
-
-
-/*
-  GtkEntry *coffee1 = gtk_combo_box_get_active(coffeeEntry);
-  printf("entry1 = %s\n", gtk_entry_get_text(coffee1));
-*/
   Value.hours = spinbuttonHours;
   Value.minutes = spinbuttonMinutes;
   Value.shortButton = shortButton;
@@ -89,18 +71,7 @@ void create_window(int argc, char* argv[], char* json_file)
   Value.disableButton = disableButton;
   Value.comboboxCoffee = coffeeEntry;
 
-/*
-  enabledCoffees.coffee1 = coffee1;
-  enabledCoffees.coffee2 = coffee2;
-  enabledCoffees.coffee3 = coffee3;
-  enabledCoffees.coffee4 = coffee4;
-  enabledCoffees.coffee5 = coffee5;
-  enabledCoffees.coffee6 = coffee6;
-  enabledCoffees.coffee7 = coffee7;
-  enabledCoffees.coffee8 = coffee8;
-  enabledCoffees.coffee9 = coffee9;
-  enabledCoffees.coffee10 = coffee10;
-*/
+
   enabledCoffees[0] = coffee1;
   enabledCoffees[1] = coffee2;
   enabledCoffees[2] = coffee3;
@@ -119,7 +90,7 @@ void create_window(int argc, char* argv[], char* json_file)
 
 
 
-
+  //Init global variable list
   for (int i = 0; i < 30; ++i)
   {
       memset(list[i], 0, 6);
@@ -129,17 +100,13 @@ void create_window(int argc, char* argv[], char* json_file)
   int c = 0;
   int posc = 0;
 
-  /*char tmp[5];
-  memset(tmp, 0, 5);*/
-
+  //Fill the list with the correct informations
   while(posCoffee < 30)
   {
-    //printf("%c\n", json_file[c]);
     if(json_file[c] == '\n')
     {
       posc = 0;
 
-      //printf("%s\n", list[posCoffee]);
       posCoffee++;
     }
     else
@@ -152,16 +119,9 @@ void create_window(int argc, char* argv[], char* json_file)
 
 
   
-/*
-
-  for(int i = 0; i < 30; i++)
-  {
-    printf("%s\n", list[i]);
-  }
-
-*/
 
 
+  //Get the values of the first coffee to initialize the window
   char* type = calloc(5, sizeof(char));
   type = list[0];
   char* time = calloc(4, sizeof(char));
@@ -169,10 +129,9 @@ void create_window(int argc, char* argv[], char* json_file)
   char* activate = calloc(1, sizeof(char));
   activate = list[2];
 
-  //printf("\ntime = %s\ntype = %s\nactivate = %s\n", time, type, activate);
-  //printf("list[0] = %s\n", list[0]);
 
 
+  //Split time in hours and minutes
   char* h = calloc(2, sizeof(char));
   char* min = calloc(2, sizeof(char));
 
@@ -189,10 +148,7 @@ void create_window(int argc, char* argv[], char* json_file)
 
 
 
-
-  //printf("%s:%s\n", h, min);
-
-  //Set the active id
+  //Set the active id of the combobox to the first coffee
   gtk_combo_box_set_active_id(coffeeEntry, "0");
 
 
@@ -205,6 +161,7 @@ void create_window(int argc, char* argv[], char* json_file)
   gtk_spin_button_set_value(spinbuttonMinutes, minutes);
 
 
+  //Set the value of the "short" or "long" radiobutton
   int ret1 = strncmp(type, "long", 4);
   int ret2 = strncmp(type, "court", 5);
 
@@ -217,7 +174,7 @@ void create_window(int argc, char* argv[], char* json_file)
     gtk_toggle_button_set_active(shortButton, TRUE);
   }
 
-
+  //Set the value of the "enable" or "disable" radiobutton
   int act = atoi(activate);
   if(act == 0)
   {
@@ -229,6 +186,7 @@ void create_window(int argc, char* argv[], char* json_file)
   }
 
 
+//Initialize the color of the 10 reference labels
 GtkStyleContext *context;
 
 for(int i = 0; i < 10; i++)
@@ -246,18 +204,6 @@ for(int i = 0; i < 10; i++)
 }
 
 
-
-
-
-  //Color the entry of the combobox
-/*
-  GtkStyleContext *context;
-  context = gtk_widget_get_style_context(main_window);
-  gtk_style_context_add_class(context,"enter_button");
-*/
-
-
-
 	//Connect signals
 	gtk_builder_connect_signals(data.builder, &data);
 
@@ -267,6 +213,7 @@ for(int i = 0; i < 10; i++)
 }
 
 
+//Init server connection
 char* client_mover()
 {
   Client cli = client();
@@ -274,7 +221,7 @@ char* client_mover()
   return cli.json_file;
 }
 
-
+//Begin with the connection to the server and then display the window
 int main(int argc, char* argv[])
 {
   char* json_file = client_mover();
@@ -283,18 +230,21 @@ int main(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-
+//Happen when click on button "Validate"
 void on_validation_clicked()
 {
+  //Get the needed informations from the global structure
   int hours = gtk_spin_button_get_value_as_int(Value.hours);
   int minutes = gtk_spin_button_get_value_as_int(Value.minutes);
   char* id = (char*)gtk_combo_box_get_active_id(Value.comboboxCoffee);
   int active;
   char* type;
 
-  GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(enabledCoffees[atoi(id)]));
 
+  GtkStyleContext *context = gtk_widget_get_style_context(GTK_WIDGET(enabledCoffees[atoi(id)]));
   gboolean act = gtk_toggle_button_get_active(Value.enableButton);
+
+  //Set active and change the color of the reference label
   if(act)
   {
     active = 1;
@@ -308,6 +258,7 @@ void on_validation_clicked()
     gtk_style_context_add_class(context, "disable");
   }
 
+  //Set the type variable
   gboolean typ = gtk_toggle_button_get_active(Value.shortButton);
   if(typ)
   {
@@ -318,13 +269,15 @@ void on_validation_clicked()
     type = "long";
   }
 
-  char* res = calloc(15, sizeof(char));
+  //Modify the global variable "List" to refresh the informations get by the combobox
 
+  //Modify "type"
   for(int i = 0; i < 5; i++)
   {
     list[atoi(id)*3][i] = type[i];
   }
 
+  //Modify "time"
   char time[5];
   sprintf(&time[0], "%d%02d", hours, minutes);
 
@@ -333,50 +286,32 @@ void on_validation_clicked()
     list[atoi(id)*3 + 1][i] = time[i];
   }
 
-  char acti = active + '0';
 
+  //Modify "active"
+  char acti = active + '0';
   list[atoi(id)*3 + 2][0] = acti;
 
 
 
 
-
-
-  printf("id = %s\n", id);
-  printf("active = %d\n", active);
-  printf("type = %s\n", type);
-  printf("time = %d", hours);
-  printf("%d\n\n", minutes);
-
-
+  //Initialize the final vriable to write to the server
+  char* res = calloc(15, sizeof(char));
 
   sprintf(res, "%s\n%d\n%s\n%d%02d\n", id, active, type, hours, minutes);
   
   write(sockfd, res, strlen(res));
-
-
-
-
-
-
-
 }
 
 
-// called when window is closed
-void on_main_window_destroy()
-{
-  write(sockfd, "closed", 6);
-  close(sockfd);
-  gtk_main_quit();
-}
 
-
+//Happen when the combox entry is changed
 void on_coffeeChooserEntry_changed()
 {
+  //Get the position of the coffee in the list thanks to the id of the active cell
   char* id = (char*)gtk_combo_box_get_active_id(Value.comboboxCoffee);
   int pos = atoi(id);
 
+  //Get the informations of this coffee
   char* type = calloc(5, sizeof(char));
   type = list[pos*3];
   char* time = calloc(4, sizeof(char));
@@ -384,8 +319,6 @@ void on_coffeeChooserEntry_changed()
   char* activate = calloc(1, sizeof(char));
   activate = list[pos*3+2];
 
-  //printf("\ntime = %s\ntype = %s\nactivate = %s\n", time, type, activate);
-  //printf("list[0] = %s\n", list[0]);
 
   char* h = calloc(2, sizeof(char));
   char* min = calloc(2, sizeof(char));
@@ -412,7 +345,7 @@ void on_coffeeChooserEntry_changed()
 
 
 
-
+  //Set the value of the "short" and "long" radiobuttons
   int ret1 = strncmp(type, "long", 4);
   int ret2 = strncmp(type, "court", 5);
 
@@ -426,6 +359,7 @@ void on_coffeeChooserEntry_changed()
   }
 
 
+//Set the value of the "enable" and "disable" radiobutton
   int act = atoi(activate);
   if(act == 0)
   {
@@ -436,4 +370,12 @@ void on_coffeeChooserEntry_changed()
     gtk_toggle_button_set_active(Value.enableButton, TRUE);
   }
 
+}
+
+// called when window is closed
+void on_main_window_destroy()
+{
+  write(sockfd, "closed", 6);
+  close(sockfd);
+  gtk_main_quit();
 }
